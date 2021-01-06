@@ -2,6 +2,14 @@
 
 Sample application to deploy in Kubernetes and test things out!
 
+* Overlays
+
+| Overlay name       | Description                                             |
+|--------------------+---------------------------------------------------------|
+| basic_app          | Basic deployment using cloud provider's load balancer   |
+| app_nginx          | Same as basic_app but uses nginx as the ingress         |
+| app_self_ssl_nginx | Same as app_nginx but also uses self signed certificate |
+
 * Usage
 
 See the *make* help targets:
