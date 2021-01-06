@@ -7,5 +7,15 @@ Sample application to deploy in Kubernetes and test things out!
 See the *make* help targets:
 
 #+begin_src sh
-make
+$ make
+Please use `make <target>' where <target> is one of
+
+build-base                     Build base kustomization
+build-base-app                 Build base-app kustomization
+apply-base-app                 Apply base-app to cluster
+remove-base-app                Remove base-app from the cluster
+help                           Show help screen.
 #+end_src
+
+More detailed documentation is availabe in each of the overlays
+directory.
