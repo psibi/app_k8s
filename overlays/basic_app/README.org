@@ -1,0 +1,30 @@
+* Usage
+
+#+begin_src sh
+$ make apply-base-app
+kubectl apply -k overlays/basic_app
+namespace/base-app created
+service/httpbin created
+deployment.apps/httpbin created
+#+end_src
+
+And let's check it's external IP:
+
+#+begin_src sh
+$ kubectl get services -n base-app
+NAME      TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)          AGE
+httpbin   LoadBalancer   10.0.26.9    REDACTED         8000:30342/TCP   61s
+#+end_src
+
+Now you can go and visit the address [[http://READACTED:8000][http://READACTED:8000]] to see the
+application running.
+
+* Destruction
+
+#+begin_src sh
+$ make remove-base-app
+kubectl delete -k overlays/basic_app
+namespace "base-app" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+#+end_src

@@ -1,0 +1,4 @@
+* Introduction
+
+This kustomization folder just contains the application deployment and
+it's service which will typically use your cloud's load balancer.

@@ -1,0 +1,11 @@
+* app_k8s
+
+Sample application to deploy in Kubernetes and test things out!
+
+* Usage
+
+See the *make* help targets:
+
+#+begin_src sh
+make
+#+end_src
