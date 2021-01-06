@@ -1,0 +1,67 @@
+* Introduction
+
+This overlay is same as [[../app_nginx/][app_nginx]] but uses self signed certificates.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- [[https://kubernetes.github.io/ingress-nginx/][ingress-nginx]]
+
+You can check it like this:
+
+#+begin_src sh
+$ kubectl get services -n kube-addons
+NAME                                 TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.0.43.218   READACTED      80:30749/TCP,443:30328/TCP   18s
+ingress-nginx-controller-admission   ClusterIP      10.0.3.0      <none>         443/TCP                      19s
+#+end_src
+
+Note that in my case, I have deployed it in the namespace
+/kube-addons/. It might be different in your case. You also need to
+create a self signed certificate:
+
+#+begin_src sh
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./key -out ./cert -subj "/CN=52.154.242.32 /O=52.154.242.32"
+#+end_src
+
+Now you need to create a certificate based on the [[https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets][docs here]]. In our
+sample manifest, we haven't commited it. You need to fix that before
+deploying it. Make sure that don't wrap lines if you are using the
+*base64* executable to do the encoding. Something like this will
+properly produce the required content:
+
+#+begin_src sh
+cat key  | base64 -w0
+#+end_src
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ make build-self-nginx-app
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+$ make apply-self-nginx-app
+#+end_src
+
+Now go to [[https://READACTED][https://READACTED]] to access your application. Since it's a
+self signed certificate you will get warning from your browser when
+you visit the page.
+
+* Destruction
+
+#+begin_src sh
+$ make remove-self-nginx-app
+kubectl delete -f nginx_app.yaml
+namespace "base-app" deleted
+secret "httpbin-tls" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+ingress.networking.k8s.io "ingress-httpbin" deleted
+#+end_src

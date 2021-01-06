@@ -36,6 +36,19 @@ apply-basic-nginx-app:
 remove-basic-nginx-app:
 	kubectl delete -f nginx_app.yaml
 
+## Build app_self_ssl_nginx overlay
+build-self-nginx-app:
+	kustomize build overlays/app_self_ssl_nginx
+
+## Build app_self_ssl_nginx overlay
+apply-self-nginx-app:
+	kustomize build overlays/app_self_ssl_nginx > nginx_app.yaml
+	kubectl apply -f nginx_app.yaml
+
+## Remove basic-nginx-app from the cluster
+remove-self-nginx-app:
+	kubectl delete -f nginx_app.yaml
+
 ## Show help screen.
 help:
 	@echo "Please use \`make <target>' where <target> is one of\n"

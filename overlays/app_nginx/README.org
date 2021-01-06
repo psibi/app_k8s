@@ -39,7 +39,7 @@ kubectl apply -f app/networking.k8s.io_v1beta1_ingress_ingress-httpbin.yaml
 ingress.networking.k8s.io/ingress-httpbin created
 #+end_src
 
-Now go to [[http://READACTED:8000][http://READACTED]] to access your application.
+Now go to [[http://READACTED][http://READACTED]] to access your application.
 
 * Destruction
 
