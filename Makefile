@@ -22,6 +22,20 @@ apply-base-app:
 remove-base-app:
 	kubectl delete -k overlays/basic_app
 
+## Build basic-nginx-app kustomization
+build-basic-nginx-app:
+	kustomize build overlays/app_nginx
+
+## Apply basic-nginx-app to cluster
+apply-basic-nginx-app:
+        # Need this workaround because of upstream issue: https://github.com/kubernetes-sigs/kustomize/issues/1373#issuecomment-618439078
+	kustomize build overlays/app_nginx > nginx_app.yaml
+	kubectl apply -f nginx_app.yaml
+
+## Remove basic-nginx-app from the cluster
+remove-basic-nginx-app:
+	kubectl delete -f nginx_app.yaml
+
 ## Show help screen.
 help:
 	@echo "Please use \`make <target>' where <target> is one of\n"

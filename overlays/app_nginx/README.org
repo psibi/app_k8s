@@ -1,0 +1,52 @@
+* Introduction
+
+This overlay is same as [[../basic_app/][basic_app]] but uses Ingress manifest from
+[[https://kubernetes.github.io/ingress-nginx/][ingress-nginx]].
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- [[https://kubernetes.github.io/ingress-nginx/][ingress-nginx]]
+
+You can check it like this:
+
+#+begin_src sh
+$ kubectl get services -n kube-addons
+NAME                                 TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.0.43.218   READACTED      80:30749/TCP,443:30328/TCP   18s
+ingress-nginx-controller-admission   ClusterIP      10.0.3.0      <none>         443/TCP                      19s
+#+end_src
+
+Note that in my case, I have deployed it in the namespace
+/kube-addons/. It might be different in your case.
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ make build-basic-nginx-app
+kustomize build overlays/app_nginx -o app
+kubectl apply -f app/v1_namespace_base-app.yaml
+namespace/base-app created
+kubectl apply -f app/apps_v1_deployment_httpbin.yaml
+deployment.apps/httpbin created
+kubectl apply -f app/v1_service_httpbin.yaml
+service/httpbin created
+kubectl apply -f app/networking.k8s.io_v1beta1_ingress_ingress-httpbin.yaml
+ingress.networking.k8s.io/ingress-httpbin created
+#+end_src
+
+Now go to [[http://READACTED:8000][http://READACTED]] to access your application.
+
+* Destruction
+
+#+begin_src sh
+make remove-basic-nginx-app
+namespace "base-app" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+ingress.networking.k8s.io "ingress-httpbin" deleted
+#+end_src
