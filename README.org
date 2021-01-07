@@ -15,16 +15,29 @@ Sample application to deploy in Kubernetes and test things out!
 
 See the *make* help targets:
 
-#+begin_src sh
-$ make
+#+begin_src sh :exports both :eval never-export :results verbatim
+make
+#+end_src
+
+#+RESULTS:
+#+begin_example
 Please use `make <target>' where <target> is one of
 
 build-base                     Build base kustomization
 build-base-app                 Build base-app kustomization
 apply-base-app                 Apply base-app to cluster
 remove-base-app                Remove base-app from the cluster
+build-basic-nginx-app          Build basic-nginx-app kustomization
+apply-basic-nginx-app          Apply basic-nginx-app to cluster
+remove-basic-nginx-app         Remove basic-nginx-app from the cluster
+build-self-nginx-app           Build app_self_ssl_nginx overlay
+apply-self-nginx-app           Build app_self_ssl_nginx overlay
+remove-self-nginx-app          Remove basic-nginx-app from the cluster
+build-app-secret-nginx         Build app-secret-nginx overlay
+apply-app-secret-nginx         Build app-secret-nginx overlay
+remove-app-secret-nginx        Remove app-secret-nginx from the cluster
 help                           Show help screen.
-#+end_src
+#+end_example
 
 More detailed documentation is availabe in each of the overlays
 directory.

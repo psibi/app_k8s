@@ -1,6 +1,6 @@
 * Introduction
 
-This overlay is same as [[../app_self_ssl_nginx][../app_self_ssl_nginx]] but uses
+This overlay is same as [[../app_self_ssl_nginx][app_self_ssl_nginx]] but uses
 external-secrets to store the secrets. In this example, we use Azure
 key vault to store our certificates.
 
