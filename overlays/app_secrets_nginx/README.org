@@ -1,0 +1,109 @@
+* Introduction
+
+This overlay is same as [[../app_self_ssl_nginx][../app_self_ssl_nginx]] but uses
+external-secrets to store the secrets. In this example, we use Azure
+key vault to store our certificates.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed/configured in your k8s cluster/cloud provider:
+
+- [[https://kubernetes.github.io/ingress-nginx/][ingress-nginx]]
+- [[https://github.com/external-secrets/kubernetes-external-secrets][external-secrets]]
+- Azure keyvault already has the certificate and the private key. Make
+  sure that you have configured [[./certificate.yaml][certificate.yaml]] appropriately.
+- Make sure to update [[./httpbin-ingress.yaml][httpbin-ingress.yaml]] with the proper TLS host
+  name.
+
+You can check that you have ingress running:
+
+#+begin_src sh
+$ kubectl get services -n kube-addons
+NAME                                 TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.0.43.218   REDACTED       80:30749/TCP,443:30328/TCP   18s
+ingress-nginx-controller-admission   ClusterIP      10.0.3.0      <none>         443/TCP                      19s
+#+end_src
+
+Note that in my case, I have deployed it in the namespace
+/kube-addons/. It might be different in your case.
+
+Steps for creating a self signed certificate which you need to upload
+to the key vault:
+
+#+begin_src sh
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./key -out ./cert -subj "/CN=REDACTED /O=REDACTED"
+#+end_src
+
+Make sure to upload both the certificate and the private key to the
+azure key vault. You might need to fix the [[./certificate.yaml][manifest.yaml]] based on your
+keyvault settings. While uploading the data to the key vault, make
+sure that don't wrap lines if you are using the *base64* executable to
+do the encoding. Something like this will properly produce the
+required content:
+
+#+begin_src sh
+cat key  | base64 -w0
+#+end_src
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ make build-app-secret-nginx
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+$ make apply-app-secret-nginx
+kustomize build overlays/app_secrets_nginx > nginx_app.yaml
+kubectl apply -f nginx_app.yaml
+namespace/base-app created
+service/httpbin created
+deployment.apps/httpbin created
+externalsecret.kubernetes-client.io/httpbin-tls created
+ingress.networking.k8s.io/ingress-httpbin created
+#+end_src
+
+Once you have applied, you can check if secrets has been populated
+correctly by the external-secrets controller:
+
+#+begin_src sh
+$ kubectl get secrets -n base-app
+NAME                  TYPE                                  DATA   AGE
+default-token-84h5q   kubernetes.io/service-account-token   3      138m
+httpbin-tls           kubernetes.io/tls                     2      25m
+#+end_src
+
+Now go to [[https://READACTED][https://READACTED]] to access your application. Since it's a
+self signed certificate you will get warning from your browser when
+you visit the page.
+
+* Destruction
+
+#+begin_src sh
+$ make remove-app-secret-nginx
+kubectl delete -f nginx_app.yaml
+namespace "base-app" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+externalsecret.kubernetes-client.io "httpbin-tls" deleted
+ingress.networking.k8s.io "ingress-httpbin" deleted
+#+end_src
+
+* Debugging
+
+In case the secret isn't properly loaded, you might want to check the
+logs of the external-secret pods.
+
+Also in case of Azure keyvault, you can use the service prinicipal
+credential which you have passed to /external-secrets/ to debug it
+further:
+
+#+begin_src sh :exports both :eval never-export :results verbatim
+az login --service-principal --username APP_ID --password PASSWORD --tenant TENANT_ID
+az keyvault list
+az keyvault secret list --vault-name tempCert
+#+end_src
