@@ -49,6 +49,19 @@ apply-self-nginx-app:
 remove-self-nginx-app:
 	kubectl delete -f nginx_app.yaml
 
+## Build app-secret-nginx overlay
+build-app-secret-nginx:
+	kustomize build overlays/app_secrets_nginx
+
+## Build app-secret-nginx overlay
+apply-app-secret-nginx:
+	kustomize build overlays/app_secrets_nginx > nginx_app.yaml
+	kubectl apply -f nginx_app.yaml
+
+## Remove app-secret-nginx from the cluster
+remove-app-secret-nginx:
+	kubectl delete -f nginx_app.yaml
+
 ## Show help screen.
 help:
 	@echo "Please use \`make <target>' where <target> is one of\n"

@@ -8,7 +8,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - 52.154.242.32
+    - READACTED # Put public ip address 172.217.167.142 or the host DNS
     secretName: httpbin-tls
   rules:
   - http:

@@ -26,11 +26,11 @@ create a self signed certificate:
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./key -out ./cert -subj "/CN=52.154.242.32 /O=52.154.242.32"
 #+end_src
 
-Now you need to create a certificate based on the [[https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets][docs here]]. In our
-sample manifest, we haven't commited it. You need to fix that before
-deploying it. Make sure that don't wrap lines if you are using the
-*base64* executable to do the encoding. Something like this will
-properly produce the required content:
+Now you need to create a secret manifest based on the [[https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets][docs here]]. In
+our [[./certificate.yaml][sample manifest]], we haven't commited the exact data. You need to
+fix that before deploying it. Make sure that you don't wrap lines if
+you are using the *base64* executable to do the encoding. Something
+like this will properly produce the required content:
 
 #+begin_src sh
 cat key  | base64 -w0
