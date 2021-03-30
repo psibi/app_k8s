@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-httpbin
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+    # You might have to change to the appropriate cluster issuer
+    cert-manager.io/cluster-issuer: "letsencrypt-dns-prod"
+spec:
+  tls:
+  - hosts:
+    - REDACTED
+    secretName: httpbin-tls
+  rules:
+  - host: REDACTED
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: httpbin
+          servicePort: 8000
