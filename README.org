@@ -10,6 +10,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[./overlays/app_nginx][app_nginx]]          | Same as basic_app but uses nginx as the ingress         |
 | [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]] | Same as app_nginx but also uses self signed certificate |
 | [[./overlays/app_secrets_nginx][app_secrets_nginx]]  | Same as app_self_ssl_nginx but using external-secrets   |
+| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]      | Same as app_self_ssl_nginx but uses cert-manager        |
 
 * Usage
 
@@ -36,6 +37,9 @@ remove-self-nginx-app          Remove basic-nginx-app from the cluster
 build-app-secret-nginx         Build app-secret-nginx overlay
 apply-app-secret-nginx         Build app-secret-nginx overlay
 remove-app-secret-nginx        Remove app-secret-nginx from the cluster
+build-ssl-nginx-app            Build app_ssl_nginx overlay
+apply-ssl-nginx                Build app-ssl-nginx overlay
+remove-ssl-nginx               Remove app-ssl-nginx from the cluster
 help                           Show help screen.
 #+end_example
 
