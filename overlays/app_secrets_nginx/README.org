@@ -107,3 +107,6 @@ az login --service-principal --username APP_ID --password PASSWORD --tenant TENA
 az keyvault list
 az keyvault secret list --vault-name tempCert
 #+end_src
+
+Also in case the SSL certificates don't work, you might want to check
+the logs of your nginx controller to get more information.
