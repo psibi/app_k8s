@@ -39,8 +39,11 @@ build-app-secret-nginx         Build app-secret-nginx overlay
 apply-app-secret-nginx         Build app-secret-nginx overlay
 remove-app-secret-nginx        Remove app-secret-nginx from the cluster
 build-ssl-nginx-app            Build app_ssl_nginx overlay
-apply-ssl-nginx                Build app-ssl-nginx overlay
+apply-ssl-nginx                Apply app-ssl-nginx overlay
 remove-ssl-nginx               Remove app-ssl-nginx from the cluster
+build-istio-app                Build istio overlay
+apply-istio-app                Apply istio overlay
+remove-istio-app               Remove istio overlay
 help                           Show help screen.
 #+end_example
 
