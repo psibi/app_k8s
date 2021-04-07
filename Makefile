@@ -66,7 +66,7 @@ remove-app-secret-nginx:
 build-ssl-nginx-app:
 	kustomize build overlays/app_ssl_nginx
 
-## Build app-ssl-nginx overlay
+## Apply app-ssl-nginx overlay
 apply-ssl-nginx:
 	kustomize build overlays/app_ssl_nginx > nginx_app.yaml
 	kubectl apply -f nginx_app.yaml
@@ -74,6 +74,22 @@ apply-ssl-nginx:
 ## Remove app-ssl-nginx from the cluster
 remove-ssl-nginx:
 	kubectl delete -f nginx_app.yaml
+
+## Build istio overlay
+build-istio-app:
+	kustomize build overlays/istio
+
+## Apply istio overlay
+apply-istio-app:
+	kustomize build overlays/istio > istio.yaml
+	kubectl apply -f istio.yaml
+	kubectl apply -f overlays/istio/certificate.yaml
+
+## Remove istio overlay
+remove-istio-app:
+	kubectl delete -f istio.yaml
+	kubectl delete -f overlays/istio/certificate.yaml
+	kubectl delete secret/httpbin-ingress-cert -n istio-system
 
 
 ## Show help screen.

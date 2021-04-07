@@ -11,6 +11,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]] | Same as app_nginx but also uses self signed certificate |
 | [[./overlays/app_secrets_nginx][app_secrets_nginx]]  | Same as app_self_ssl_nginx but using external-secrets   |
 | [[./overlays/app_ssl_nginx/][app_ssl_nginx]]      | Same as app_self_ssl_nginx but uses cert-manager        |
+| [[file:overlays/istio/][istio]]              | Same as app_ssl_nginx but uses istio                    |
 
 * Usage
 

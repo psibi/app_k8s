@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 443
+      name: https-httpbin
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: httpbin-ingress-cert # This should match the Certifcate secretName
+    hosts:
+    - REDACTED # This should match a DNS name in the Certificate
+  - port:
+      number: 80
+      name: http-httpbin
+      protocol: HTTP
+    hosts:
+    - "REDACTED" # this is used by external-dns to extract DNS names
