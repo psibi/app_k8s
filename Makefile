@@ -104,6 +104,19 @@ apply-monitoring-app:
 remove-monitoring-app:
 	kubectl delete -f monitoring.yaml
 
+## Build monitoring-istio-perm overlay
+build-monitoring-istio-perm-app:
+	kustomize build overlays/monitoring-istio-permissive
+
+## Apply monitoring-istio-perm overlay
+apply-monitoring-istio-perm-app:
+	kustomize build overlays/monitoring-istio-permissive > monitoring-istio-perm.yaml
+	kubectl apply -f monitoring-istio-perm.yaml
+
+## Remove monitoring-istio-perm overlay
+remove-monitoring-istio-perm-app:
+	kubectl delete -f monitoring-istio-perm.yaml
+
 
 ## Show help screen.
 help:
