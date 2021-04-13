@@ -91,6 +91,19 @@ remove-istio-app:
 	kubectl delete -f overlays/istio/certificate.yaml
 	kubectl delete secret/httpbin-ingress-cert -n istio-system
 
+## Build monitoring overlay
+build-monitoring-app:
+	kustomize build overlays/monitoring
+
+## Apply monitoring overlay
+apply-monitoring-app:
+	kustomize build overlays/monitoring > monitoring.yaml
+	kubectl apply -f monitoring.yaml
+
+## Remove monitoring overlay
+remove-monitoring-app:
+	kubectl delete -f monitoring.yaml
+
 
 ## Show help screen.
 help:
