@@ -4,14 +4,16 @@ Sample application to deploy in Kubernetes and test things out!
 
 * Overlays
 
-| Overlay name       | Description                                             |
-|--------------------+---------------------------------------------------------|
-| [[./overlays/basic_app][basic_app]]          | Basic deployment using cloud provider's load balancer   |
-| [[./overlays/app_nginx][app_nginx]]          | Same as basic_app but uses nginx as the ingress         |
-| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]] | Same as app_nginx but also uses self signed certificate |
-| [[./overlays/app_secrets_nginx][app_secrets_nginx]]  | Same as app_self_ssl_nginx but using external-secrets   |
-| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]      | Same as app_self_ssl_nginx but uses cert-manager        |
-| [[file:overlays/istio/][istio]]              | Same as app_ssl_nginx but uses istio                    |
+| Overlay name       | Description                                                |
+|--------------------+------------------------------------------------------------|
+| [[./overlays/basic_app][basic_app]]          | Basic deployment using cloud provider's load balancer      |
+| [[./overlays/app_nginx][app_nginx]]          | Same as basic_app but uses nginx as the ingress            |
+| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]] | Same as app_nginx but also uses self signed certificate    |
+| [[./overlays/app_secrets_nginx][app_secrets_nginx]]  | Same as app_self_ssl_nginx but using external-secrets      |
+| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]      | Same as app_self_ssl_nginx but uses cert-manager           |
+| [[file:overlays/istio/][istio]]              | Same as app_ssl_nginx but uses istio                       |
+| [[./overlays/monitoring][monitoring]]         | Application with prometheus metrics for testing prometheus |
+| [[./overlays/monitoring-istio/][monitoring-istio]]   | Same as monitoring but for istio                           |
 
 * Usage
 
@@ -44,6 +46,12 @@ remove-ssl-nginx               Remove app-ssl-nginx from the cluster
 build-istio-app                Build istio overlay
 apply-istio-app                Apply istio overlay
 remove-istio-app               Remove istio overlay
+build-monitoring-app           Build monitoring overlay
+apply-monitoring-app           Apply monitoring overlay
+remove-monitoring-app          Remove monitoring overlay
+build-monitoring-istio-app     Build monitoring-istio overlay
+apply-monitoring-istio-app     Apply monitoring-istio overlay
+remove-monitoring-istio-app    Remove monitoring-istio overlay
 help                           Show help screen.
 #+end_example
 
