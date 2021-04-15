@@ -11,4 +11,4 @@ metadata:
   name: peer
 spec:
   mtls:
-    mode: PERMISSIVE
+    mode: STRICT
