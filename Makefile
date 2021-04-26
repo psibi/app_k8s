@@ -22,6 +22,19 @@ apply-base-app:
 remove-base-app:
 	kubectl delete -k overlays/basic_app
 
+## Build base-internal-app kustomization
+build-base-internal-app:
+	kustomize build overlays/basic_app_internal
+
+## Apply base-internal-app to cluster
+apply-base-internal-app:
+	kustomize build overlays/basic_app_internal > internal.yaml
+	kubectl apply -f  internal.yaml
+
+## Remove base-internal-app from the cluster
+remove-base-internal-app:
+	kubectl delete -f internal.yaml
+
 ## Build basic-nginx-app kustomization
 build-basic-nginx-app:
 	kustomize build overlays/app_nginx
