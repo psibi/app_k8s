@@ -1,0 +1,6 @@
+- op: add
+  path: "/spec/template/spec/volumes"
+  value:
+    - name: test-volume
+      persistentVolumeClaim:
+        claimName: myclaim

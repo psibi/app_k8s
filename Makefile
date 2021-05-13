@@ -35,6 +35,19 @@ apply-base-internal-app:
 remove-base-internal-app:
 	kubectl delete -f internal.yaml
 
+## Build base-internal-app-pv kustomization
+build-base-internal-app-pv:
+	kustomize build overlays/basic_app_internal_pv
+
+## Apply base-internal-app-pv to cluster
+apply-base-internal-app-pv:
+	kustomize build overlays/basic_app_internal_pv > internal.yaml
+	kubectl apply -f  internal.yaml
+
+## Remove base-internal-app-pv from the cluster
+remove-base-internal-app-pv:
+	kubectl delete -f internal.yaml
+
 ## Build basic-nginx-app kustomization
 build-basic-nginx-app:
 	kustomize build overlays/app_nginx
