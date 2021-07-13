@@ -143,6 +143,20 @@ apply-monitoring-istio-app:
 remove-monitoring-istio-app:
 	kubectl delete -f monitoring-istio.yaml
 
+## Build istio-k8s-ingress overlay
+build-istio-k8s-ingress-app:
+	kustomize build overlays/istio_k8s_ingress
+
+## Apply istio-k8s-ingress overlay
+apply-istio-k8s-ingress-app:
+	kustomize build overlays/istio_k8s_ingress > istio.yaml
+	kubectl apply -f overlays/istio_k8s_ingress/certificate.yaml
+	kubectl apply -f istio.yaml
+
+## Remove istio-k8s-ingress overlay
+remove-istio-k8s-ingress-app:
+	kubectl delete -f istio.yaml
+
 
 ## Show help screen.
 help:
