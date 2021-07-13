@@ -12,6 +12,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[./overlays/app_secrets_nginx][app_secrets_nginx]]     | Same as app_self_ssl_nginx but using external-secrets      |
 | [[./overlays/app_ssl_nginx/][app_ssl_nginx]]         | Same as app_self_ssl_nginx but uses cert-manager           |
 | [[file:overlays/istio/][istio]]                 | Same as app_ssl_nginx but uses istio                       |
+| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]     | Same as istio but uses kubernetes ingress                  |
 | [[./overlays/monitoring][monitoring]]            | Application with prometheus metrics for testing prometheus |
 | [[./overlays/monitoring-istio/][monitoring-istio]]      | Same as monitoring but for istio                           |
 | [[file:overlays/basic_app_internal/][basic_app_internal]]    | Same as basic_app but application isn't exposed            |
@@ -27,40 +28,42 @@ make
 
 #+RESULTS:
 #+begin_example
-Please use `make <target>' where <target> is one of
-
-build-base                     Build base kustomization
-build-base-app                 Build base-app kustomization
-apply-base-app                 Apply base-app to cluster
-remove-base-app                Remove base-app from the cluster
-build-base-internal-app        Build base-internal-app kustomization
-apply-base-internal-app        Apply base-internal-app to cluster
-remove-base-internal-app       Remove base-internal-app from the cluster
-build-base-internal-app-pv     Build base-internal-app-pv kustomization
-apply-base-internal-app-pv     Apply base-internal-app-pv to cluster
-remove-base-internal-app-pv    Remove base-internal-app-pv from the cluster
-build-basic-nginx-app          Build basic-nginx-app kustomization
-apply-basic-nginx-app          Apply basic-nginx-app to cluster
-remove-basic-nginx-app         Remove basic-nginx-app from the cluster
-build-self-nginx-app           Build app_self_ssl_nginx overlay
-apply-self-nginx-app           Build app_self_ssl_nginx overlay
-remove-self-nginx-app          Remove basic-nginx-app from the cluster
-build-app-secret-nginx         Build app-secret-nginx overlay
-apply-app-secret-nginx         Build app-secret-nginx overlay
-remove-app-secret-nginx        Remove app-secret-nginx from the cluster
-build-ssl-nginx-app            Build app_ssl_nginx overlay
-apply-ssl-nginx                Apply app-ssl-nginx overlay
-remove-ssl-nginx               Remove app-ssl-nginx from the cluster
-build-istio-app                Build istio overlay
-apply-istio-app                Apply istio overlay
-remove-istio-app               Remove istio overlay
-build-monitoring-app           Build monitoring overlay
-apply-monitoring-app           Apply monitoring overlay
-remove-monitoring-app          Remove monitoring overlay
-build-monitoring-istio-app     Build monitoring-istio overlay
-apply-monitoring-istio-app     Apply monitoring-istio overlay
-remove-monitoring-istio-app    Remove monitoring-istio overlay
-help                           Show help screen.
+Please use `make <target>' where <target> is one of\n
+build-base:                    Build base kustomization
+build-base-app:                Build base-app kustomization
+apply-base-app:                Apply base-app to cluster
+remove-base-app:               Remove base-app from the cluster
+build-base-internal-app:       Build base-internal-app kustomization
+apply-base-internal-app:       Apply base-internal-app to cluster
+remove-base-internal-app:      Remove base-internal-app from the cluster
+build-base-internal-app-pv:    Build base-internal-app-pv kustomization
+apply-base-internal-app-pv:    Apply base-internal-app-pv to cluster
+remove-base-internal-app-pv:   Remove base-internal-app-pv from the cluster
+build-basic-nginx-app:         Build basic-nginx-app kustomization
+apply-basic-nginx-app:         Apply basic-nginx-app to cluster
+remove-basic-nginx-app:        Remove basic-nginx-app from the cluster
+build-self-nginx-app:          Build app_self_ssl_nginx overlay
+apply-self-nginx-app:          Build app_self_ssl_nginx overlay
+remove-self-nginx-app:         Remove basic-nginx-app from the cluster
+build-app-secret-nginx:        Build app-secret-nginx overlay
+apply-app-secret-nginx:        Build app-secret-nginx overlay
+remove-app-secret-nginx:       Remove app-secret-nginx from the cluster
+build-ssl-nginx-app:           Build app_ssl_nginx overlay
+apply-ssl-nginx:               Apply app-ssl-nginx overlay
+remove-ssl-nginx:              Remove app-ssl-nginx from the cluster
+build-istio-app:               Build istio overlay
+apply-istio-app:               Apply istio overlay
+remove-istio-app:              Remove istio overlay
+build-monitoring-app:          Build monitoring overlay
+apply-monitoring-app:          Apply monitoring overlay
+remove-monitoring-app:         Remove monitoring overlay
+build-monitoring-istio-app:    Build monitoring-istio overlay
+apply-monitoring-istio-app:    Apply monitoring-istio overlay
+remove-monitoring-istio-app:   Remove monitoring-istio overlay
+build-istio-k8s-ingress-app:   Build istio-k8s-ingress overlay
+apply-istio-k8s-ingress-app:   Apply istio-k8s-ingress overlay
+remove-istio-k8s-ingress-app:  Remove istio-k8s-ingress overlay
+help:                          Show help screen.
 #+end_example
 
 More detailed documentation is availabe in each of the overlays
