@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-httpbin
+  annotations:
+    # use the shared istio
+    kubernetes.io/ingress.class: "istio"
+spec:
+  tls:
+  - hosts:
+    - REDACTED
+    secretName: httpbin2-ingress-cert
+  rules:
+  - host: REDACTED
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: httpbin
+          servicePort: 8000
