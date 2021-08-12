@@ -157,6 +157,18 @@ apply-istio-k8s-ingress-app:
 remove-istio-k8s-ingress-app:
 	kubectl delete -f istio.yaml
 
+## Build app-internal-istio overlay
+build-app-internal-istio:
+	kustomize build overlays/app_internal_istio
+
+## Apply app-internal-istio overlay
+apply-app-internal-istio:
+	kustomize build overlays/app_internal_istio > istio.yaml
+	kubectl apply -f istio.yaml
+
+## Remove app-internal-istio overlay
+remove-app-internal-istio:
+	kubectl delete -f istio.yaml
 
 ## Show help screen.
 help:

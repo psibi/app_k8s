@@ -1,0 +1,59 @@
+* Introduction
+
+This overlay is same as [[../basic_app_internal][basic_app_internal]] but additional has istio
+gateway and virtual service. The gateway is annotated to use cloud
+provider's internal load balancer.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- istio: We assume that istio is configured with additional gateway
+  backed by cloud provider's internal load balancer.
+
+You might want to change the hostname or the selector in the gateway
+and virtualservice:
+
+- gateway.yaml
+- virtualservice.yaml
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ make build-app-internal-istio:
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+$ make apply-app-internal-istio
+kustomize build overlays/app_internal_istio > istio.yaml
+kubectl apply -f istio.yaml
+namespace/base-app unchanged
+service/httpbin unchanged
+deployment.apps/httpbin unchanged
+gateway.networking.istio.io/httpbin unchanged
+virtualservice.networking.istio.io/httpbin configured
+#+end_src
+
+Now get the IP of the internal load balancer and exec into one of the
+pod of the cluster (since it's internal LB):
+
+#+begin_example
+curl -s -I -H Host:httpin.example.com http://internal-ip:80/status/200
+#+end_example
+
+* Destruction
+
+#+begin_src sh
+$ make remove-app-internal-istio
+kubectl delete -f istio.yaml
+namespace "base-app" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+gateway.networking.istio.io "httpbin" deleted
+virtualservice.networking.istio.io "httpbin" deleted
+#+end_src
