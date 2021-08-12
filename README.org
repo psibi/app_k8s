@@ -17,6 +17,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[./overlays/monitoring-istio/][monitoring-istio]]      | Same as monitoring but for istio                           |
 | [[file:overlays/basic_app_internal/][basic_app_internal]]    | Same as basic_app but application isn't exposed            |
 | [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]] | Same as basic_app_internal but also uses persistent volume |
+| [[file:overlays/app_internal_istio/][app_internal_istio]]    | Same as basic_app_internal but uses cloud's internal LB    |
 
 * Usage
 
