@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: tornado-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http-ws
+      protocol: HTTP
+    hosts:
+    - REDACTED
+  - port:
+      number: 443
+      name: https-ws
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: ws-istio
+    hosts:
+    - REDACTED
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: tornado
+spec:
+  hosts:
+  - REDACTED
+  gateways:
+  - tornado-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: tornado.websocket.svc.cluster.local
+      weight: 100

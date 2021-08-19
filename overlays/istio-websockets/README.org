@@ -1,0 +1,53 @@
+* Introduction
+
+This overlay is same as [[../istio][istio]] but uses websocket application. But this
+demonstrates a sidecar container pattern in istio mesh with nginx
+acting as a reverse proxy.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- istio
+- cert-manager
+
+You might want to change the hostname or the selector in the gateway
+and virtualservice:
+
+- istio.yaml
+
+You might also want to change the host in the certificate:
+
+- certificate.yaml
+
+* Usage
+
+#+begin_src sh
+$ make apply-istio-websockets
+kubectl apply -k overlays/basic_app
+namespace/base-app created
+service/httpbin created
+deployment.apps/httpbin created
+#+end_src
+
+And let's check it's external IP:
+
+#+begin_src sh
+$ kubectl get services -n websocket
+NAME      TYPE           CLUSTER-IP   EXTERNAL-IP      PORT(S)          AGE
+httpbin   LoadBalancer   10.0.26.9    REDACTED         8000:30342/TCP   61s
+#+end_src
+
+Now you can go and visit the address [[http://READACTED:8000][http://READACTED:8000]] to see the
+application running.
+
+* Destruction
+
+#+begin_src sh
+$ make remove-base-app
+kubectl delete -k overlays/basic_app
+namespace "base-app" deleted
+service "httpbin" deleted
+deployment.apps "httpbin" deleted
+#+end_src

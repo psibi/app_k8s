@@ -1,0 +1,18 @@
+# https://istio.io/latest/docs/ops/integrations/certmanager/
+# https://cert-manager.io/docs/usage/certificate/
+
+# The Certificate should be created in the same namespace as the
+# istio-ingressgateway deployment
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: ws
+  namespace: istio-system
+spec:
+  secretName: ws-istio
+  issuerRef:
+    name: letsencrypt-dns-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - REDACTED

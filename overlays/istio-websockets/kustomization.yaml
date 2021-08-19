@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: websocket
+
+resources:
+- namespace.yaml
+- websocket.yaml
+- istio.yaml

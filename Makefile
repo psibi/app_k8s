@@ -170,6 +170,21 @@ apply-app-internal-istio:
 remove-app-internal-istio:
 	kubectl delete -f istio.yaml
 
+## Build istio-websocket overlay
+build-istio-websocket:
+	kustomize build overlays/websockets
+
+## Apply istio-websocket overlay
+apply-istio-websocket:
+	kustomize build overlays/websockets > ws.yaml
+	kubectl apply -f overlays/websockets/certificate.yaml
+	kubectl apply -f ws.yaml
+
+## Remove istio-websocket overlay
+remove-istio-websocket:
+	kubectl delete -f overlays/websockets/certificate.yaml
+	kubectl delete -f ws.yaml
+
 ## Show help screen.
 help:
 	@echo "Please use \`make <target>' where <target> is one of\n"
