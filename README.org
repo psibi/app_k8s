@@ -4,20 +4,21 @@ Sample application to deploy in Kubernetes and test things out!
 
 * Overlays
 
-| Overlay name          | Description                                                |
-|-----------------------+------------------------------------------------------------|
-| [[./overlays/basic_app][basic_app]]             | Basic deployment using cloud provider's load balancer      |
-| [[./overlays/app_nginx][app_nginx]]             | Same as basic_app but uses nginx as the ingress            |
-| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]    | Same as app_nginx but also uses self signed certificate    |
-| [[./overlays/app_secrets_nginx][app_secrets_nginx]]     | Same as app_self_ssl_nginx but using external-secrets      |
-| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]         | Same as app_self_ssl_nginx but uses cert-manager           |
-| [[file:overlays/istio/][istio]]                 | Same as app_ssl_nginx but uses istio                       |
-| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]     | Same as istio but uses kubernetes ingress                  |
-| [[./overlays/monitoring][monitoring]]            | Application with prometheus metrics for testing prometheus |
-| [[./overlays/monitoring-istio/][monitoring-istio]]      | Same as monitoring but for istio                           |
-| [[file:overlays/basic_app_internal/][basic_app_internal]]    | Same as basic_app but application isn't exposed            |
-| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]] | Same as basic_app_internal but also uses persistent volume |
-| [[file:overlays/app_internal_istio/][app_internal_istio]]    | Same as basic_app_internal but uses cloud's internal LB    |
+| Overlay name          | Description                                                       |
+|-----------------------+-------------------------------------------------------------------|
+| [[./overlays/basic_app][basic_app]]             | Basic deployment using cloud provider's load balancer             |
+| [[./overlays/app_nginx][app_nginx]]             | Same as basic_app but uses nginx as the ingress                   |
+| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]    | Same as app_nginx but also uses self signed certificate           |
+| [[./overlays/app_secrets_nginx][app_secrets_nginx]]     | Same as app_self_ssl_nginx but using external-secrets             |
+| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]         | Same as app_self_ssl_nginx but uses cert-manager                  |
+| [[file:overlays/istio/][istio]]                 | Same as app_ssl_nginx but uses istio                              |
+| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]     | Same as istio but uses kubernetes ingress                         |
+| [[./overlays/monitoring][monitoring]]            | Application with prometheus metrics for testing prometheus        |
+| [[./overlays/monitoring-istio/][monitoring-istio]]      | Same as monitoring but for istio                                  |
+| [[file:overlays/basic_app_internal/][basic_app_internal]]    | Same as basic_app but application isn't exposed                   |
+| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]] | Same as basic_app_internal but also uses persistent volume        |
+| [[file:overlays/app_internal_istio/][app_internal_istio]]    | Same as basic_app_internal but uses cloud's internal LB           |
+| [[file:overlays/istio-websockets/][istio_websockets]]      | Same as istio but demonstrates websocket app with sidecar pattern |
 
 * Usage
 
@@ -64,6 +65,12 @@ remove-monitoring-istio-app:   Remove monitoring-istio overlay
 build-istio-k8s-ingress-app:   Build istio-k8s-ingress overlay
 apply-istio-k8s-ingress-app:   Apply istio-k8s-ingress overlay
 remove-istio-k8s-ingress-app:  Remove istio-k8s-ingress overlay
+build-app-internal-istio:      Build app-internal-istio overlay
+apply-app-internal-istio:      Apply app-internal-istio overlay
+remove-app-internal-istio:     Remove app-internal-istio overlay
+build-istio-websocket:         Build istio-websocket overlay
+apply-istio-websocket:         Apply istio-websocket overlay
+remove-istio-websocket:        Remove istio-websocket overlay
 help:                          Show help screen.
 #+end_example
 

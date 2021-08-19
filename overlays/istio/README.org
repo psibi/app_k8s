@@ -10,6 +10,12 @@ installed in your k8s cluster:
 - istio
 - cert-manager
 
+You might want to change the hostname and/or the selector in the gateway
+and virtualservice according to your setup:
+
+- gateway.yaml
+- virtualservice.yaml
+
 * Usage
 
 Make sure it builds fine:

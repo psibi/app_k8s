@@ -4,7 +4,7 @@ metadata:
   name: httpbin
 spec:
   selector:
-    istio: istio-internal-ingressgateway # Might have to replace it based on your setting
+    istio: internal-ingressgateway  # Might have to replace it based on your setting
   servers:
   - port:
       number: 80
