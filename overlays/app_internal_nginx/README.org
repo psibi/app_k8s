@@ -1,0 +1,34 @@
+* Introduction
+
+This overlay is same as [[../app_internal_istio][app_internal_istio]] but uses internal nginx.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- internal nginx controller
+
+You might want to change the hostname in the ingress manifest:
+
+- ingress.yaml
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ make build-app-internal-istio:
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+$ make apply-app-internal-nginx
+#+end_src
+
+* Destruction
+
+#+begin_src sh
+$ make remove-app-internal-nginx
+#+end_src

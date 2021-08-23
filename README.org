@@ -19,6 +19,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]] | Same as basic_app_internal but also uses persistent volume        |
 | [[file:overlays/app_internal_istio/][app_internal_istio]]    | Same as basic_app_internal but uses cloud's internal LB           |
 | [[file:overlays/istio-websockets/][istio_websockets]]      | Same as istio but demonstrates websocket app with sidecar pattern |
+| [[file:overlays/app_internal_nginx/][app_internal_nginx]]    | Same as app_internal_istio but uses nginx ingress                 |
 
 * Usage
 
@@ -71,6 +72,9 @@ remove-app-internal-istio:     Remove app-internal-istio overlay
 build-istio-websocket:         Build istio-websocket overlay
 apply-istio-websocket:         Apply istio-websocket overlay
 remove-istio-websocket:        Remove istio-websocket overlay
+build-app-internal-nginx:      Build app-internal-nginx overlay
+apply-app-internal-nginx:      Apply app-internal-nginx overlay
+remove-app-internal-nginx:     Remove app-internal-nginx overlay
 help:                          Show help screen.
 #+end_example
 

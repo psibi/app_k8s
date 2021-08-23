@@ -185,6 +185,19 @@ remove-istio-websocket:
 	kubectl delete -f overlays/websockets/certificate.yaml
 	kubectl delete -f ws.yaml
 
+## Build app-internal-nginx overlay
+build-app-internal-nginx:
+	kustomize build overlays/app_internal_nginx
+
+## Apply app-internal-nginx overlay
+apply-app-internal-nginx:
+	kustomize build overlays/app_internal_nginx > internal_nginx.yaml
+	kubectl apply -f internal_nginx.yaml
+
+## Remove app-internal-nginx overlay
+remove-app-internal-nginx:
+	kubectl delete -f internal_nginx.yaml
+
 ## Show help screen.
 help:
 	@echo "Please use \`make <target>' where <target> is one of\n"
