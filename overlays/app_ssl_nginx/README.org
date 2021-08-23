@@ -22,18 +22,28 @@ ingress-nginx-controller-admission   ClusterIP      10.0.3.0      <none>        
 Note that in my case, I have deployed it in the namespace
 /kube-addons/. It might be different in your case.
 
+You might want to change the hostname in the ingress manifest:
+
+- httpbin-ingress.yaml
+
 * Usage
 
 Make sure it builds fine:
 
 #+begin_src sh
-$ make build-ssl-nginx-app
+$ just build-ssl-nginx-app
 #+end_src
 
 Now go ahead and deploy it:
 
 #+begin_src
-$ make apply-ssl-nginx
+$ just apply-ssl-nginx
+kustomize build overlays/app_ssl_nginx > nginx_app.yaml
+kubectl apply -f nginx_app.yaml
+namespace/base-app unchanged
+service/httpbin unchanged
+deployment.apps/httpbin unchanged
+ingress.networking.k8s.io/ingress-httpbin created
 #+end_src
 
 Now go to [[https://READACTED][https://READACTED]] to access your application.
@@ -41,7 +51,7 @@ Now go to [[https://READACTED][https://READACTED]] to access your application.
 * Destruction
 
 #+begin_src sh
-$ make remove-ssl-nginx
+$ just remove-ssl-nginx
 kubectl delete -f nginx_app.yaml
 namespace "base-app" deleted
 service "httpbin" deleted

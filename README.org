@@ -23,59 +23,59 @@ Sample application to deploy in Kubernetes and test things out!
 
 * Usage
 
-See the *make* help targets:
+See the *just* help targets:
 
 #+begin_src sh :exports both :eval never-export :results verbatim
-make
+just
 #+end_src
 
 #+RESULTS:
 #+begin_example
-Please use `make <target>' where <target> is one of\n
-build-base:                    Build base kustomization
-build-base-app:                Build base-app kustomization
-apply-base-app:                Apply base-app to cluster
-remove-base-app:               Remove base-app from the cluster
-build-base-internal-app:       Build base-internal-app kustomization
-apply-base-internal-app:       Apply base-internal-app to cluster
-remove-base-internal-app:      Remove base-internal-app from the cluster
-build-base-internal-app-pv:    Build base-internal-app-pv kustomization
-apply-base-internal-app-pv:    Apply base-internal-app-pv to cluster
-remove-base-internal-app-pv:   Remove base-internal-app-pv from the cluster
-build-basic-nginx-app:         Build basic-nginx-app kustomization
-apply-basic-nginx-app:         Apply basic-nginx-app to cluster
-remove-basic-nginx-app:        Remove basic-nginx-app from the cluster
-build-self-nginx-app:          Build app_self_ssl_nginx overlay
-apply-self-nginx-app:          Build app_self_ssl_nginx overlay
-remove-self-nginx-app:         Remove basic-nginx-app from the cluster
-build-app-secret-nginx:        Build app-secret-nginx overlay
-apply-app-secret-nginx:        Build app-secret-nginx overlay
-remove-app-secret-nginx:       Remove app-secret-nginx from the cluster
-build-ssl-nginx-app:           Build app_ssl_nginx overlay
-apply-ssl-nginx:               Apply app-ssl-nginx overlay
-remove-ssl-nginx:              Remove app-ssl-nginx from the cluster
-build-istio-app:               Build istio overlay
-apply-istio-app:               Apply istio overlay
-remove-istio-app:              Remove istio overlay
-build-monitoring-app:          Build monitoring overlay
-apply-monitoring-app:          Apply monitoring overlay
-remove-monitoring-app:         Remove monitoring overlay
-build-monitoring-istio-app:    Build monitoring-istio overlay
-apply-monitoring-istio-app:    Apply monitoring-istio overlay
-remove-monitoring-istio-app:   Remove monitoring-istio overlay
-build-istio-k8s-ingress-app:   Build istio-k8s-ingress overlay
-apply-istio-k8s-ingress-app:   Apply istio-k8s-ingress overlay
-remove-istio-k8s-ingress-app:  Remove istio-k8s-ingress overlay
-build-app-internal-istio:      Build app-internal-istio overlay
-apply-app-internal-istio:      Apply app-internal-istio overlay
-remove-app-internal-istio:     Remove app-internal-istio overlay
-build-istio-websocket:         Build istio-websocket overlay
-apply-istio-websocket:         Apply istio-websocket overlay
-remove-istio-websocket:        Remove istio-websocket overlay
-build-app-internal-nginx:      Build app-internal-nginx overlay
-apply-app-internal-nginx:      Apply app-internal-nginx overlay
-remove-app-internal-nginx:     Remove app-internal-nginx overlay
-help:                          Show help screen.
+Available recipes:
+    default                      # List all recipies
+    build-base                   # Build base kustomization
+    build-base-app               # Build base-app kustomization
+    apply-base-app               # Apply base-app to cluster
+    remove-base-app              # Remove base-app from the cluster
+    build-base-internal-app      # Build base-internal-app kustomization
+    apply-base-internal-app      # Apply base-internal-app to cluster
+    remove-base-internal-app     # Remove base-internal-app from the cluster
+    build-base-internal-app-pv   # Build base-internal-app-pv kustomization
+    apply-base-internal-app-pv   # Apply base-internal-app-pv to cluster
+    remove-base-internal-app-pv  # Remove base-internal-app-pv from the cluster
+    build-basic-nginx-app        # Build basic-nginx-app kustomization
+    apply-basic-nginx-app        # Apply basic-nginx-app to cluster
+    remove-basic-nginx-app       # Remove basic-nginx-app from the cluster
+    build-self-nginx-app         # Build app_self_ssl_nginx overlay
+    apply-self-nginx-app         # Build app_self_ssl_nginx overlay
+    remove-self-nginx-app        # Remove basic-nginx-app from the cluster
+    build-app-secret-nginx       # Build app-secret-nginx overlay
+    apply-app-secret-nginx       # Build app-secret-nginx overlay
+    remove-app-secret-nginx      # Remove app-secret-nginx from the cluster
+    build-ssl-nginx-app          # Build app_ssl_nginx overlay
+    apply-ssl-nginx              # Apply app-ssl-nginx overlay
+    remove-ssl-nginx             # Remove app-ssl-nginx from the cluster
+    build-istio-app              # Build istio overlay
+    apply-istio-app              # Apply istio overlay
+    remove-istio-app             # Remove istio overlay
+    build-monitoring-app         # Build monitoring overlay
+    apply-monitoring-app         # Apply monitoring overlay
+    remove-monitoring-app        # Remove monitoring overlay
+    build-monitoring-istio-app   # Build monitoring-istio overlay
+    apply-monitoring-istio-app   # Apply monitoring-istio overlay
+    remove-monitoring-istio-app  # Remove monitoring-istio overlay
+    build-istio-k8s-ingress-app  # Build istio-k8s-ingress overlay
+    apply-istio-k8s-ingress-app  # Apply istio-k8s-ingress overlay
+    remove-istio-k8s-ingress-app # Remove istio-k8s-ingress overlay
+    build-app-internal-istio     # Build app-internal-istio overlay
+    apply-app-internal-istio     # Apply app-internal-istio overlay
+    remove-app-internal-istio    # Remove app-internal-istio overlay
+    build-istio-websocket        # Build istio-websocket overlay
+    apply-istio-websocket        # Apply istio-websocket overlay
+    remove-istio-websocket       # Remove istio-websocket overlay
+    build-app-internal-nginx     # Build app-internal-nginx overlay
+    apply-app-internal-nginx     # Apply app-internal-nginx overlay
+    remove-app-internal-nginx    # Remove app-internal-nginx overlay
 #+end_example
 
 More detailed documentation is availabe in each of the overlays
