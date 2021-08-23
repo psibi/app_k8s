@@ -1,7 +1,7 @@
 * Usage
 
 #+begin_src sh
-$ make apply-base-app
+$ just apply-base-app
 kubectl apply -k overlays/basic_app
 namespace/base-app created
 service/httpbin created
@@ -22,7 +22,7 @@ application running.
 * Destruction
 
 #+begin_src sh
-$ make remove-base-app
+$ just remove-base-app
 kubectl delete -k overlays/basic_app
 namespace "base-app" deleted
 service "httpbin" deleted

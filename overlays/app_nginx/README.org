@@ -27,7 +27,7 @@ Note that in my case, I have deployed it in the namespace
 Make sure it builds fine:
 
 #+begin_src sh
-$ make build-basic-nginx-app
+$ just build-basic-nginx-app
 kustomize build overlays/app_nginx -o app
 kubectl apply -f app/v1_namespace_base-app.yaml
 namespace/base-app created
@@ -44,7 +44,7 @@ Now go to [[http://READACTED][http://READACTED]] to access your application.
 * Destruction
 
 #+begin_src sh
-make remove-basic-nginx-app
+just remove-basic-nginx-app
 namespace "base-app" deleted
 service "httpbin" deleted
 deployment.apps "httpbin" deleted

@@ -14,6 +14,7 @@ You might want to change the hostname and/or the selector in the gateway
 and virtualservice according to your setup:
 
 - gateway.yaml
+- certificate.yaml
 - virtualservice.yaml
 
 * Usage
@@ -21,13 +22,22 @@ and virtualservice according to your setup:
 Make sure it builds fine:
 
 #+begin_src sh
-$ make build-istio-app
+$ just build-istio-app
 #+end_src
 
 Now go ahead and deploy it:
 
 #+begin_src
-$ make apply-istio-app
+$ just apply-istio-app
+kustomize build overlays/istio > istio.yaml
+kubectl apply -f istio.yaml
+namespace/base-app created
+service/httpbin created
+deployment.apps/httpbin created
+gateway.networking.istio.io/httpbin-gateway created
+virtualservice.networking.istio.io/httpbin created
+kubectl apply -f overlays/istio/certificate.yaml
+certificate.cert-manager.io/httpbin-ingress-cert created
 #+end_src
 
 Now go to [[https://READACTED][https://READACTED]] to access your application.
@@ -35,7 +45,7 @@ Now go to [[https://READACTED][https://READACTED]] to access your application.
 * Destruction
 
 #+begin_src sh
-$ make remove-istio-app
+$ just remove-istio-app
 kubectl delete -f istio.yaml
 namespace "base-app" deleted
 service "httpbin" deleted

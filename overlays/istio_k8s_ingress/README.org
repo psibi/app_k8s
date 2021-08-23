@@ -16,13 +16,13 @@ installed in your k8s cluster:
 Make sure it builds fine:
 
 #+begin_src sh
-$ make build-istio-k8s-ingress-app
+$ just build-istio-k8s-ingress-app
 #+end_src
 
 Now go ahead and deploy it:
 
 #+begin_src
-$ make apply-istio-k8s-ingress-app
+$ just apply-istio-k8s-ingress-app
 #+end_src
 
 Now go to [[https://READACTED][https://READACTED]] to access your application.
@@ -30,7 +30,7 @@ Now go to [[https://READACTED][https://READACTED]] to access your application.
 * Destruction
 
 #+begin_src sh
-$ make remove-istio-k8s-ingress-app
+$ just remove-istio-k8s-ingress-app
 kubectl delete -f istio.yaml
 namespace "base-app" deleted
 service "httpbin" deleted

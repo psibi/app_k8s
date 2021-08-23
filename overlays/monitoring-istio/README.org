@@ -22,11 +22,11 @@ $ build-monitoring-istio-app
 Now go ahead and deploy it:
 
 #+begin_src
-$ make apply-monitoring-istio-app
+$ just apply-monitoring-istio-app
 #+end_src
 
 * Destruction
 
 #+begin_src sh
-$ make remove-monitoring-istio-app
+$ just remove-monitoring-istio-app
 #+end_src

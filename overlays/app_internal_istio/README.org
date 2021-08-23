@@ -23,7 +23,7 @@ and virtualservice:
 Make sure it builds fine:
 
 #+begin_src sh
-$ make build-app-internal-istio:
+$ just build-app-internal-istio:
 #+end_src
 
 Now go ahead and deploy it:
@@ -49,7 +49,7 @@ curl -s -I -H Host:httpin.example.com http://internal-ip:80/status/200
 * Destruction
 
 #+begin_src sh
-$ make remove-app-internal-istio
+$ just remove-app-internal-istio
 kubectl delete -f istio.yaml
 namespace "base-app" deleted
 service "httpbin" deleted
