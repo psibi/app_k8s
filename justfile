@@ -192,3 +192,7 @@ apply-app-internal-nginx:
 # Remove app-internal-nginx overlay
 remove-app-internal-nginx:
 	kubectl delete -f internal_nginx.yaml
+
+# Check kubectl
+check:
+    kubectl get nodes
