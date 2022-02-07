@@ -8,6 +8,9 @@ spec:
   - http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: httpbin
-          servicePort: 8000
+          service:
+            name: httpbin
+            port:
+              number: 8000
