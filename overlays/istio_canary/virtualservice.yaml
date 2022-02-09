@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+  namespace: base-app
+spec:
+  gateways:
+  - httpbin-gateway
+  hosts:
+  - REDACTED
+  http:
+  - route:
+    - destination:
+        host: httpbin.base-app.svc.cluster.local
+        port:
+          number: 8000
+      weight: 80
+    - destination:
+        host: tornado.base-app.svc.cluster.local
+        port:
+          number: 8888
+      weight: 20

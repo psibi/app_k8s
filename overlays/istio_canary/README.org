@@ -1,0 +1,83 @@
+* Introduction
+
+This overlay implements canary deployment using istio. There are two
+applications here:
+
+- httpbin application
+- websocket application
+
+The objective is to route 80% of the traffic to httpbin application
+and the remaining one to the websocket application.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- istio
+- cert-manager
+
+You might want to change the hostname or the selector in the gateway
+and virtualservice:
+
+- gateway.yaml
+- virtualservice.yaml
+
+You might also want to change the host in the certificate:
+
+- certificate.yaml
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just apply-istio-canary
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+❯ just apply-istio-canary
+kustomize build overlays/istio_canary > istio.yaml
+kubectl apply -f istio.yaml
+namespace/base-app unchanged
+service/httpbin unchanged
+service/tornado unchanged
+deployment.apps/httpbin unchanged
+deployment.apps/tornado unchanged
+gateway.networking.istio.io/httpbin-gateway unchanged
+virtualservice.networking.istio.io/httpbin unchanged
+kubectl apply -f overlays/istio_canary/certificate.yaml
+certificate.cert-manager.io/httpbin-ingress-cert created
+#+end_src
+
+Now go to [[https://READACTED][https://READACTED]] to access your application.
+
+* Test the canary behavior
+
+Edit the [[file:test.sh][test.sh]] script to change the URL. And then execute the script
+to confirm the behavior:
+
+#+begin_example sh
+❯ ./test.sh
+    <title>httpbin.org</title>
+    <title>httpbin.org</title>
+<title>tornado WebSocket example</title>
+    <title>httpbin.org</title>
+    <title>httpbin.org</title>
+<title>tornado WebSocket example</title>
+    <title>httpbin.org</title>
+    <title>httpbin.org</title>
+    <title>httpbin.org</title>
+    <title>httpbin.org</title>
+#+end_example
+
+You can see that out of the 10 requests, 2 are forwarded to the
+websocket and the remaining are forwarded to the httpbin service.
+
+* Destruction
+
+#+begin_example sh
+just remove-istio-canary-app
+#+end_example
