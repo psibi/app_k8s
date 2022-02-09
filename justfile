@@ -193,6 +193,22 @@ apply-app-internal-nginx:
 remove-app-internal-nginx:
 	kubectl delete -f internal_nginx.yaml
 
+# Build istio-canary overlay
+build-istio-canary:
+	kustomize build overlays/istio_canary
+
+# Apply istio-canary overlay
+apply-istio-canary:
+	kustomize build overlays/istio_canary > istio.yaml
+	kubectl apply -f istio.yaml
+	kubectl apply -f overlays/istio_canary/certificate.yaml
+
+# Remove istio-canary overlay
+remove-istio-canary-app:
+	kubectl delete -f istio.yaml
+	kubectl delete -f overlays/istio_canary/certificate.yaml
+	kubectl delete secret/httpbin-ingress-cert -n istio-system
+
 # Check kubectl
 check:
     kubectl get nodes
