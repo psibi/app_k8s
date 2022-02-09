@@ -4,7 +4,7 @@
 # The Certificate should be created in the same namespace as the
 # istio-ingressgateway deployment
 
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: httpbin-ingress-cert
