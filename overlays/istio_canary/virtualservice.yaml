@@ -11,12 +11,14 @@ spec:
   http:
   - route:
     - destination:
-        host: httpbin.base-app.svc.cluster.local
+        host: httpbin.canary.svc.cluster.local
+        subset: v1
         port:
           number: 8000
-      weight: 80
+      weight: 10
     - destination:
-        host: tornado.base-app.svc.cluster.local
+        host: httpbin.canary.svc.cluster.local
+        subset: v2
         port:
-          number: 8888
-      weight: 20
+          number: 8001
+      weight: 90

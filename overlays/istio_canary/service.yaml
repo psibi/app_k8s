@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: httpbin
+  name: httpbin
+spec:
+  ports:
+  - name: httpbin
+    port: 8000
+    targetPort: 80
+  - name: tornado
+    port: 8001
+    targetPort: 8888
+  selector:
+    app: httpbin
+  type: ClusterIP
