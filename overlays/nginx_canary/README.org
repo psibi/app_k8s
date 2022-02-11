@@ -1,0 +1,83 @@
+* Introduction
+
+This overlay implements canary deployment using NGINX
+controller. There are two applications here:
+
+- stable application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=yellow][yellow application]])
+- canary application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to route 80% of the traffic to stable application
+and the remaining one to the canary application.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- NGINX controller
+- cert-manager
+
+You might want to change the hostname or the selector in the gateway
+and virtualservice:
+
+- [[file:stable_ingress.yaml][stable_ingress.yaml]]
+- [[file:canary_ingress.yaml][canary_ingress.yaml]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just apply-nginx-canary
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+❯ just apply-istio-canary
+kustomize build overlays/nginx_canary > nginx_canary.yaml
+kubectl apply -f nginx_canary.yaml
+namespace/canary unchanged
+service/canary unchanged
+service/httpbin unchanged
+deployment.apps/canary unchanged
+deployment.apps/httpbin unchanged
+ingress.networking.k8s.io/blue-ingress unchanged
+ingress.networking.k8s.io/canary-ingress configured
+#+end_src
+
+Now go to [[https://READACTED][https://READACTED]] to access your application.
+
+* Test the canary behavior
+
+Set the annotation in the canary ingress to "0" initially and observe
+the behavior:
+
+#+begin_example sh
+❯ seq 10 | xargs -Iz curl -s https://REDACTED/color
+"yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow"
+#+end_example
+
+You can see that all you are getting "yellow" color response for all
+the requests. Now set the annotation to "20" and run the same command:
+
+#+begin_example sh
+❯ seq 10 | xargs -Iz curl -s https://REDACTED/color
+"yellow""yellow""green""yellow""green""green""yellow""yellow""yellow""yellow"
+#+end_example
+
+And you can confirm that around 20% of the requests go to the canary
+version. You can of course also confirm the behavior using your
+browser.
+
+* Destruction
+
+#+begin_example sh
+$ just remove-nginx-canary-app
+kubectl delete -f nginx_canary.yaml
+namespace "canary" deleted
+service "canary" deleted
+service "prod" deleted
+deployment.apps "canary" deleted
+deployment.apps "prod" deleted
+#+end_example

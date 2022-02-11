@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "20"
+  name: canary-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: REDACTED
+    http:
+      paths:
+      - backend:
+          service:
+            name: canary
+            port:
+              number: 8000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - REDACTED
+    secretName: prod-ingress-tls

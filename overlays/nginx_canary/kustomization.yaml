@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: canary
+
+resources:
+- namespace.yaml
+- stable_ingress.yaml
+- stable_service.yaml
+- stable_deployment.yaml
+- canary_ingress.yaml
+- canary_service.yaml
+- canary_deployment.yaml
