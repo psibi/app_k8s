@@ -19,8 +19,9 @@ Sample application to deploy in Kubernetes and test things out!
 | [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]] | Same as basic_app_internal but also uses persistent volume        |
 | [[file:overlays/app_internal_istio/][app_internal_istio]]    | Same as basic_app_internal but uses cloud's internal LB           |
 | [[file:overlays/istio-websockets/][istio_websockets]]      | Same as istio but demonstrates websocket app with sidecar pattern |
-| [[file:overlays/istio_canary/][istio_canary]]          | Canary Deployment strategy using Istio                            |
 | [[file:overlays/app_internal_nginx/][app_internal_nginx]]    | Same as app_internal_istio but uses nginx ingress                 |
+| [[file:overlays/istio_canary/][istio_canary]]          | Canary Deployment strategy using Istio                            |
+| [[file:overlays/nginx_canary/][nginx_canary]]          | Canary Deployment strategy using NGINX                            |
 
 * Usage
 
@@ -53,9 +54,9 @@ Available recipes:
     build-app-secret-nginx       # Build app-secret-nginx overlay
     apply-app-secret-nginx       # Build app-secret-nginx overlay
     remove-app-secret-nginx      # Remove app-secret-nginx from the cluster
-    build-ssl-nginx-app          # Build app_ssl_nginx overlay
-    apply-ssl-nginx              # Apply app-ssl-nginx overlay
-    remove-ssl-nginx             # Remove app-ssl-nginx from the cluster
+    build-app-ssl-nginx          # Build app_ssl_nginx overlay
+    apply-app-ssl-nginx          # Apply app-ssl-nginx overlay
+    remove-app-ssl-nginx         # Remove app-ssl-nginx from the cluster
     build-istio-app              # Build istio overlay
     apply-istio-app              # Apply istio overlay
     remove-istio-app             # Remove istio overlay
@@ -80,6 +81,9 @@ Available recipes:
     build-istio-canary           # Build istio-canary overlay
     apply-istio-canary           # Apply istio-canary overlay
     remove-istio-canary-app      # Remove istio-canary overlay
+    build-nginx-canary           # Build nginx-canary overlay
+    apply-nginx-canary           # Apply nginx-canary overlay
+    remove-nginx-canary-app      # Remove nginx-canary overlay
     check                        # Check kubectl
 #+end_example
 
