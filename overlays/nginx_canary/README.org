@@ -28,7 +28,7 @@ and virtualservice:
 Make sure it builds fine:
 
 #+begin_src sh
-$ just apply-nginx-canary
+$ just build-nginx-canary
 #+end_src
 
 Now go ahead and deploy it:
@@ -54,7 +54,7 @@ Set the annotation in the canary ingress to "0" initially and observe
 the behavior:
 
 #+begin_example sh
-❯ seq 10 | xargs -Iz curl -s https://REDACTED/color
+❯ seq 10 | xargs -I{} curl -s https://REDACTED/color
 "yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow""yellow"
 #+end_example
 
@@ -62,7 +62,7 @@ You can see that all you are getting "yellow" color response for all
 the requests. Now set the annotation to "20" and run the same command:
 
 #+begin_example sh
-❯ seq 10 | xargs -Iz curl -s https://REDACTED/color
+❯ seq 10 | xargs -I{} curl -s https://REDACTED/color
 "yellow""yellow""green""yellow""green""green""yellow""yellow""yellow""yellow"
 #+end_example
 
