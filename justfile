@@ -222,6 +222,19 @@ apply-nginx-canary:
 remove-nginx-canary-app:
     kubectl delete -f nginx_canary.yaml
 
+# Build argo-rollouts-nginx-canary overlay
+build-argo-rollouts-nginx-canary:
+    kustomize build overlays/argo_rollouts_nginx_canary
+
+# Apply argo-rollouts-nginx-canary overlay
+apply-argo-rollouts-nginx-canary:
+    kustomize build overlays/argo_rollouts_nginx_canary > argo-rollouts-nginx_canary.yaml
+    kubectl apply -f argo-rollouts-nginx_canary.yaml
+
+# Remove argo-rollouts-nginx-canary overlay
+remove-argo-rollouts-nginx-canary-app:
+    kubectl delete -f argo-rollouts-nginx_canary.yaml
+
 # Check kubectl
 check:
     kubectl get nodes
