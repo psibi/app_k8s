@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+spec:
+  strategy:
+    canary:
+      analysis:
+        templates:
+        - templateName: success-rate
+        startingStep: 1 # delay starting analysis run until setWeight: 40%
+        args:
+        - name: service-name
+          value: canary
+      steps:
+      - setWeight: 20
+      - setWeight: 40
+      - setWeight: 60
+      - setWeight: 80

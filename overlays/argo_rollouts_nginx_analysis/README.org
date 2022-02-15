@@ -1,0 +1,205 @@
+* Introduction
+
+This overlay is same as [[file:..s/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]] but also uses
+[[https://argoproj.github.io/argo-rollouts/features/analysis/][AnalysisTemplate]] to do progressive delivery. There are two
+applications here:
+
+- stable application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=yellow][yellow application]])
+- canary application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to do progressive delivery in the following steps:
+- Expand 20% of the traffic to canary application
+- 'AnalysisRun' is stared and based on the result we gradually keep improving the traffic.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- NGINX controller
+- cert-manager
+- Argo Rollouts
+- Prometheus
+- [[https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation][kubectl plugin for Argo rollout]]
+
+You might want to change the hostname in the following resources of
+the base overlay:
+
+- [[file:~/github/app_k8s/overlays/argo_rollouts_nginx_canary/stable_ingress.yaml][stable_ingress.yaml]]
+- [[file:analysis_template.yaml][analysis_template.yaml]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just build-nginx-canary
+#+end_src
+
+Now let's apply it:
+
+#+begin_example sh
+kustomize build overlays/argo_rollouts_nginx_analysis > argo-rollouts-nginx-analysis_analysis.yaml
+kubectl apply -f argo-rollouts-nginx-analysis_analysis.yaml
+namespace/canary created
+service/canary created
+service/prod created
+analysistemplate.argoproj.io/success-rate created
+rollout.argoproj.io/rollouts-demo created
+ingress.networking.k8s.io/prod-ingress created
+#+end_example
+
+Now your stable application would be up and running. You can even
+confirm it:
+
+#+begin_src sh
+seq 10 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow
+
+** Canary Deployment
+
+Now we want to make sure that we deploy our canary application.
+
+We also know that this it the image of our canary application:
+
+#+begin_example text
+docker.io/argoproj/rollouts-demo:green
+#+end_example
+
+Let's check our current rollout initially:
+
+#+begin_src sh :results verbatim
+kubectl argo rollouts -n canary get rollout rollouts-demo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Name:            rollouts-demo
+Namespace:       canary
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          4/4
+  SetWeight:     100
+  ActualWeight:  100
+Images:          docker.io/argoproj/rollouts-demo:yellow (stable)
+Replicas:
+  Desired:       1
+  Current:       1
+  Updated:       1
+  Ready:         1
+  Available:     1
+
+NAME                                       KIND        STATUS     AGE    INFO
+⟳ rollouts-demo                            Rollout     ✔ Healthy  3m5s
+└──# revision:1
+   └──⧉ rollouts-demo-845cc87948           ReplicaSet  ✔ Healthy  2m45s  stable
+      └──□ rollouts-demo-845cc87948-jghzd  Pod         ✔ Running  2m45s  ready:1/1
+#+end_example
+
+We can see that our stable application is running well. Now we have to
+change the image for our canary version:
+
+#+begin_src sh
+kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/rollouts-demo:green
+#+end_src
+
+#+RESULTS:
+: rollouts-demo
+
+Now let's check the status again:
+
+#+begin_src sh :results verbatim
+kubectl argo rollouts -n canary get rollout rollouts-demo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Name:            rollouts-demo
+Namespace:       canary
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          4/4
+  SetWeight:     100
+  ActualWeight:  100
+Images:          docker.io/argoproj/rollouts-demo:green (stable)
+                 docker.io/argoproj/rollouts-demo:yellow
+Replicas:
+  Desired:       1
+  Current:       2
+  Updated:       1
+  Ready:         2
+  Available:     2
+
+NAME                                       KIND         STATUS        AGE    INFO
+⟳ rollouts-demo                            Rollout      ✔ Healthy     3m37s
+├──# revision:2
+│  ├──⧉ rollouts-demo-7457cfdf4f           ReplicaSet   ✔ Healthy     14s    stable
+│  │  └──□ rollouts-demo-7457cfdf4f-cfzdj  Pod          ✔ Running     14s    ready:1/1
+│  └──α rollouts-demo-7457cfdf4f-2         AnalysisRun  ✔ Successful  11s    ⚠ 1
+└──# revision:1
+   └──⧉ rollouts-demo-845cc87948           ReplicaSet   ✔ Healthy     3m17s  delay:18s
+      └──□ rollouts-demo-845cc87948-jghzd  Pod          ✔ Running     3m17s  ready:1/1
+#+end_example
+
+You can see that there are two applications running. After some time,
+you can see that the entire application would have switched to the
+canary application based on the analysis run:
+
+#+begin_src sh :results verbatim
+kubectl argo rollouts -n canary get rollout rollouts-demo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Name:            rollouts-demo
+Namespace:       canary
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          4/4
+  SetWeight:     100
+  ActualWeight:  100
+Images:          docker.io/argoproj/rollouts-demo:green (stable)
+Replicas:
+  Desired:       1
+  Current:       1
+  Updated:       1
+  Ready:         1
+  Available:     1
+
+NAME                                       KIND         STATUS        AGE    INFO
+⟳ rollouts-demo                            Rollout      ✔ Healthy     7m37s
+├──# revision:2
+│  ├──⧉ rollouts-demo-7457cfdf4f           ReplicaSet   ✔ Healthy     4m14s  stable
+│  │  └──□ rollouts-demo-7457cfdf4f-cfzdj  Pod          ✔ Running     4m14s  ready:1/1
+│  └──α rollouts-demo-7457cfdf4f-2         AnalysisRun  ✔ Successful  4m11s  ⚠ 1
+└──# revision:1
+   └──⧉ rollouts-demo-845cc87948           ReplicaSet   • ScaledDown  7m17s
+#+end_example
+
+And you can also confirm it's behavior:
+
+#+begin_src sh
+seq 12 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: green"green"green"green"green"green"green"green"green"green
+
+Let's check the analysis report:
+
+#+begin_src sh :results verbatim
+kubectl -n canary get ar
+#+end_src
+
+#+RESULTS:
+: NAME                         STATUS
+: rollouts-demo-7457cfdf4f-2   Successful
+
+You can see how the status of the analysis run was successful.
+
+* References
+
+- [[https://argoproj.github.io/argo-rollouts/features/analysis/][Official docs: Analysis]]

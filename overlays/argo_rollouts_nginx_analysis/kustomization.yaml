@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: canary
+
+bases:
+- ../argo_rollouts_nginx_canary
+
+patchesStrategicMerge:
+- rollout.yaml
+
+resources:
+- analysis_template.yaml

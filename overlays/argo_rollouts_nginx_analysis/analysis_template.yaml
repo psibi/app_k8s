@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  args:
+  - name: service-name
+  metrics:
+  - name: success-rate
+    interval: 5m
+    # NOTE: prometheus queries return results in the form of a vector.
+    # So it is common to access the index 0 of the returned array to obtain the value
+    successCondition: result[0] <= 0.5
+    failureLimit: 3
+    provider:
+      prometheus:
+        address: http://kube360-kube-prometheus-st-prometheus.kube360-system.svc.cluster.local:9090
+        query: |
+          sum(rate(nginx_ingress_controller_requests{exported_service="{{args.service-name}}", status="500"}[5m]))
