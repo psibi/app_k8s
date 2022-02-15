@@ -235,6 +235,20 @@ apply-argo-rollouts-nginx-canary:
 remove-argo-rollouts-nginx-canary-app:
     kubectl delete -f argo-rollouts-nginx_canary.yaml
 
+# Build argo-rollouts-nginx-analysis-analysis overlay
+build-argo-rollouts-nginx-analysis:
+    kustomize build overlays/argo_rollouts_nginx_analysis
+
+# Apply argo-rollouts-nginx-analysis-analysis overlay
+apply-argo-rollouts-nginx-analysis:
+    kustomize build overlays/argo_rollouts_nginx_analysis > argo-rollouts-nginx-analysis_analysis.yaml
+    kubectl apply -f argo-rollouts-nginx-analysis_analysis.yaml
+
+# Remove argo-rollouts-nginx-analysis-analysis overlay
+remove-argo-rollouts-nginx-analysis:
+    kubectl delete -f argo-rollouts-nginx-analysis_analysis.yaml
+
+
 # Check kubectl
 check:
     kubectl get nodes
