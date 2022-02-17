@@ -46,7 +46,7 @@ ingress.networking.k8s.io/prod-ingress created
 Now your stable application would be up and running. You can even
 confirm it:
 
-#+begin_src sh
+#+begin_src sh :exports both
 seq 10 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
@@ -101,7 +101,7 @@ NAME                                       KIND        STATUS        AGE  INFO
 We can see that our stable application is running well. Now we have to
 change the image for our canary version:
 
-#+begin_src sh
+#+begin_src sh  :exports both
 kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/rollouts-demo:green
 #+end_src
 
@@ -110,7 +110,7 @@ kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/
 
 Now let's check the status again:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim  :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -147,7 +147,7 @@ So you can see that it's current status is paused. We can also see
 that there are two revision. We now have 20% of our traffic being
 routed to the canary application. Let's test that via curl:
 
-#+begin_src sh
+#+begin_src sh :exports both
 seq 12 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
@@ -161,7 +161,7 @@ Now that the rollout is in a paused state, let's promote it to the
 next stage so that the entire traffic is served by the newer
 application:
 
-#+begin_src sh
+#+begin_src sh :exports both
 kubectl argo rollouts -n canary promote rollouts-demo
 #+end_src
 
@@ -170,7 +170,7 @@ kubectl argo rollouts -n canary promote rollouts-demo
 
 Now let's check the rollout status:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim  :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -203,7 +203,7 @@ NAME                                       KIND        STATUS        AGE  INFO
 Now you can confirm that the application is actually entirely switced
 to the canary (green) application. You can confirm it via curl too:
 
-#+begin_src sh
+#+begin_src sh  :exports both
 seq 12 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
@@ -219,7 +219,7 @@ objective is that we want to update it to yellow now. So let's edit
 the Rollout manifest to point to the proper image and then do ~kubectl
 apply~. And then let's check the rollout status:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim  :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -255,7 +255,7 @@ NAME                                       KIND        STATUS     AGE  INFO
 You can see that yellow application is pointed as the canary
 application. You can also confirm it's behavior:
 
-#+begin_src sh
+#+begin_src sh  :exports both
 seq 12 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
