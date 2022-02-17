@@ -52,7 +52,7 @@ ingress.networking.k8s.io/prod-ingress created
 Now your stable application would be up and running. You can even
 confirm it:
 
-#+begin_src sh
+#+begin_src sh :exports both
 seq 10 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
@@ -71,7 +71,7 @@ docker.io/argoproj/rollouts-demo:green
 
 Let's check our current rollout initially:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -102,7 +102,7 @@ NAME                                       KIND        STATUS     AGE    INFO
 We can see that our stable application is running well. Now we have to
 change the image for our canary version:
 
-#+begin_src sh
+#+begin_src sh :exports both
 kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/rollouts-demo:green
 #+end_src
 
@@ -111,7 +111,7 @@ kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/
 
 Now let's check the status again:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -148,7 +148,7 @@ You can see that there are two applications running. After some time,
 you can see that the entire application would have switched to the
 canary application based on the analysis run:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
@@ -181,7 +181,7 @@ NAME                                       KIND         STATUS        AGE    INF
 
 And you can also confirm it's behavior:
 
-#+begin_src sh
+#+begin_src sh :exports both
 seq 12 | xargs -I{} curl -s https://REDACTED/color
 #+end_src
 
@@ -190,7 +190,7 @@ seq 12 | xargs -I{} curl -s https://REDACTED/color
 
 Let's check the analysis report:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :exports both
 kubectl -n canary get ar
 #+end_src
 

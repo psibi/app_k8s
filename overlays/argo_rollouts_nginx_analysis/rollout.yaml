@@ -8,7 +8,7 @@ spec:
       analysis:
         templates:
         - templateName: success-rate
-        startingStep: 1 # delay starting analysis run until setWeight: 40%
+        startingStep: 1 # delay starting analysis run until setWeight: 20%
         args:
         - name: service-name
           value: canary
