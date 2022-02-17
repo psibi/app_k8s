@@ -68,7 +68,7 @@ docker.io/argoproj/rollouts-demo:green
 Let's do it via the CLI way initially. Let's check our current rollout
 initially:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :exports both
 kubectl argo rollouts -n canary get rollout rollouts-demo
 #+end_src
 
