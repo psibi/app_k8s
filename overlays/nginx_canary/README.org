@@ -17,8 +17,7 @@ installed in your k8s cluster:
 - NGINX controller
 - cert-manager
 
-You might want to change the hostname or the selector in the gateway
-and virtualservice:
+You might want to change the hostname in the following ingresses:
 
 - [[file:stable_ingress.yaml][stable_ingress.yaml]]
 - [[file:canary_ingress.yaml][canary_ingress.yaml]]
