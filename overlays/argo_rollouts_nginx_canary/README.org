@@ -1,3 +1,11 @@
+* Table Of Contents                                                     :TOC:
+- [[#introduction][Introduction]]
+- [[#pre-requisites][Pre-requisites]]
+- [[#usage][Usage]]
+  - [[#canary-deployment][Canary Deployment]]
+- [[#forcing-canary-behavior][Forcing Canary behavior]]
+- [[#reference][Reference]]
+
 * Introduction
 
 This overlay implements canary deployment using NGINX
@@ -265,6 +273,47 @@ seq 12 | xargs -I{} curl -s https://REDACTED/color
 Now you can manually promote it via the CLI or you could use features
 like canary analysis etc to bring automated progressive delivery
 feature.
+
+* Forcing Canary behavior
+
+While testing your canary application, you might want your QA team to
+always visit the canary application. To do it, we have this
+configuration in the rollout:
+
+#+begin_example yaml
+additionalIngressAnnotations:   # optional
+  canary-by-header: X-Canary
+#+end_example
+
+This is the current behvaior:
+
+#+begin_src sh  :exports both
+seq 12 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: green"green"green"green"yellow"green"green"green"yellow"green
+
+Now let's use the header value to always visit the canary application:
+
+#+begin_src sh :exports both
+seq 12 | xargs -I{} curl -s --header "X-Canary: always" https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow
+
+And let's say you want to force it to visit the stable application:
+
+#+begin_src sh :exports both
+seq 12 | xargs -I{} curl -s --header "X-Canary: never" https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: green"green"green"green"green"green"green"green"green"green
+
+You can also test the similar workflow in your Chrome or Firefox
+browser using [[https://github.com/didierfred/SimpleModifyHeaders][SimpleModifyHeaders]] extension.
 
 * Reference
 
