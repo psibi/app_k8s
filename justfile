@@ -235,6 +235,19 @@ apply-argo-rollouts-nginx-canary:
 remove-argo-rollouts-nginx-canary-app:
     kubectl delete -f argo-rollouts-nginx_canary.yaml
 
+# Build argo-rollouts-nginx-canary_v2 overlay
+build-argo-rollouts-nginx-canary_v2:
+    kustomize build overlays/argo_rollouts_nginx_canary_v2
+
+# Apply argo-rollouts-nginx-canary_v2 overlay
+apply-argo-rollouts-nginx-canary_v2:
+    kustomize build overlays/argo_rollouts_nginx_canary_v2 > argo-rollouts-nginx_canary.yaml
+    kubectl apply -f argo-rollouts-nginx_canary.yaml
+
+# Remove argo-rollouts-nginx-canary_v2 overlay
+remove-argo-rollouts-nginx-canary_v2:
+    kubectl delete -f argo-rollouts-nginx_canary.yaml
+
 # Build argo-rollouts-nginx-analysis-analysis overlay
 build-argo-rollouts-nginx-analysis:
     kustomize build overlays/argo_rollouts_nginx_analysis
@@ -247,7 +260,6 @@ apply-argo-rollouts-nginx-analysis:
 # Remove argo-rollouts-nginx-analysis-analysis overlay
 remove-argo-rollouts-nginx-analysis:
     kubectl delete -f argo-rollouts-nginx-analysis_analysis.yaml
-
 
 # Check kubectl
 check:

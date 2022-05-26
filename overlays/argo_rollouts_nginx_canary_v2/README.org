@@ -1,0 +1,196 @@
+* Introduction
+
+This overlay implements canary deployment using NGINX
+controller and Argo Rollouts. There are two applications here:
+
+- stable application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=yellow][yellow application]])
+- canary application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to route 80% of the traffic to stable application
+and the remaining one to the canary application.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- NGINX controller
+- cert-manager
+- Argo Rollouts
+- [[https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation][kubectl plugin for Argo rollout]]
+
+You might want to change the hostname in the following resources:
+
+- [[file:stable_ingress.yaml][stable_ingress.yaml]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just build-nginx-canary
+#+end_src
+
+Now let's apply it:
+
+#+begin_example sh
+kustomize build overlays/argo_rollouts_nginx_canary > argo-rollouts-nginx_canary.yaml
+kubectl apply -f argo-rollouts-nginx_canary.yaml
+namespace/canary unchanged
+service/canary unchanged
+service/prod unchanged
+rollout.argoproj.io/rollouts-demo created
+ingress.networking.k8s.io/prod-ingress created
+#+end_example
+
+Now your stable application would be up and running. You can even
+confirm it:
+
+#+begin_src sh :exports both
+seq 10 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow"yellow
+
+** Canary Deployment
+
+Now we want to make sure that we deploy our canary application.
+
+We also know that this it the image of our canary application:
+
+#+begin_example text
+docker.io/argoproj/rollouts-demo:green
+#+end_example
+
+*** Manifest
+
+Now we want to make sure that we deploy our canary application.
+
+We also know that this it the image of our canary application:
+
+#+begin_example text
+docker.io/argoproj/rollouts-demo:green
+#+end_example
+
+Let's edit the [[file:deployment.yaml][deployment.yaml]] to point to the proper image and then
+do ~kubectl apply~. And then let's check the rollout status:
+
+#+begin_src sh :results verbatim  :exports both
+kubectl argo rollouts -n canary get rollout rollouts-demo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Name:            rollouts-demo
+Namespace:       canary
+Status:          ॥ Paused
+Message:         CanaryPauseStep
+Strategy:        Canary
+  Step:          1/2
+  SetWeight:     20
+  ActualWeight:  20
+Images:          docker.io/argoproj/rollouts-demo:green (canary)
+                 docker.io/argoproj/rollouts-demo:yellow (stable)
+Replicas:
+  Desired:       1
+  Current:       2
+  Updated:       1
+  Ready:         2
+  Available:     2
+
+NAME                                      KIND        STATUS     AGE    INFO
+⟳ rollouts-demo                           Rollout     ॥ Paused   12m
+├──# revision:2
+│  └──⧉ rollouts-demo-657cc75d8           ReplicaSet  ✔ Healthy  3m48s  canary
+│     └──□ rollouts-demo-657cc75d8-w4l2c  Pod         ✔ Running  3m47s  ready:1/1
+└──# revision:1
+   └──⧉ rollouts-demo-ff8fdcf77           ReplicaSet  ✔ Healthy  12m    stable
+      └──□ rollouts-demo-ff8fdcf77-fhkk7  Pod         ✔ Running  12m    ready:1/1
+#+end_example
+
+
+You can see that green application is pointed as the canary
+application. You can also confirm it's behavior:
+
+#+begin_src sh  :exports both
+seq 12 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: yellow"green"green"green"green"green"yellow"green"green"green
+
+Now you can manually promote it via the CLI or you could use features
+like canary analysis etc to bring automated progressive delivery
+feature.
+
+Let's promote it via CLI:
+
+#+begin_src sh :results verbatim  :exports both
+kubectl argo rollouts -n canary promote rollouts-demo
+#+end_src
+
+#+RESULTS:
+: rollout 'rollouts-demo' promoted
+
+Now let's check the status again:
+
+#+begin_src sh :results verbatim  :exports both
+kubectl argo rollouts -n canary get rollout rollouts-demo
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Name:            rollouts-demo
+Namespace:       canary
+Status:          ✔ Healthy
+Strategy:        Canary
+  Step:          2/2
+  SetWeight:     100
+  ActualWeight:  100
+Images:          docker.io/argoproj/rollouts-demo:green (stable)
+                 docker.io/argoproj/rollouts-demo:yellow
+Replicas:
+  Desired:       1
+  Current:       2
+  Updated:       1
+  Ready:         2
+  Available:     2
+
+NAME                                      KIND        STATUS     AGE    INFO
+⟳ rollouts-demo                           Rollout     ✔ Healthy  15m
+├──# revision:2
+│  └──⧉ rollouts-demo-657cc75d8           ReplicaSet  ✔ Healthy  6m22s  stable
+│     └──□ rollouts-demo-657cc75d8-w4l2c  Pod         ✔ Running  6m21s  ready:1/1
+└──# revision:1
+   └──⧉ rollouts-demo-ff8fdcf77           ReplicaSet  ✔ Healthy  14m    delay:7s
+      └──□ rollouts-demo-ff8fdcf77-fhkk7  Pod         ✔ Running  14m    ready:1/1
+#+end_example
+
+As you can see that the green application is the stable now. Let's
+check again the responses:
+
+#+begin_src sh  :exports both
+seq 12 | xargs -I{} curl -s https://REDACTED/color
+#+end_src
+
+#+RESULTS:
+: "green""green""green""green""green""green""green""green""green""green""green""green"
+
+*** CLI
+
+It wasn't possible to do changes for me via CLI. Doing it cause this
+error:
+
+#+begin_example
+❯ kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/rollouts-demo:green
+Error: unable to find container named "prod"
+#+end_example
+
+I guess it'a s limitation when we use `workloadRef` to reference a
+deployment object.
+
+* Reference
+
+- [[https://argoproj.github.io/argo-rollouts/getting-started/][Official docs on basic workflow]]
+- [[https://argoproj.github.io/argo-rollouts/getting-started/nginx/][Official docs on NGINX based deployment]]

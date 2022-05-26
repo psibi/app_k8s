@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod
+spec:
+  replicas: 0 # Make sure it's zero
+  selector:
+    matchLabels:
+      app: prod
+  template:
+    metadata:
+      labels:
+        app: prod
+    spec:
+      containers:
+      - image: docker.io/argoproj/rollouts-demo:green
+        imagePullPolicy: IfNotPresent
+        name: prod
+        ports:
+        - containerPort: 8000

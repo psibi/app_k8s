@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prod
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prod
+  strategy:
+    canary:
+      # Reference to a Service which the controller will update to point to the canary ReplicaSet
+      canaryService: canary
+      # Reference to a Service which the controller will update to point to the stable ReplicaSet
+      stableService: prod
+      trafficRouting:
+        nginx:
+          # Reference to an Ingress which has a rule pointing to the stable service (e.g. rollouts-demo-stable)
+          # This ingress will be cloned with a new name, in order to achieve NGINX traffic splitting.
+          stableIngress: prod-ingress
+      steps:
+      - setWeight: 20
+      - pause: {}

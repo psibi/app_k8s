@@ -4,26 +4,27 @@ Sample application to deploy in Kubernetes and test things out!
 
 * Overlays
 
-| Overlay name                 | Description                                                       |
-|------------------------------+-------------------------------------------------------------------|
-| [[./overlays/basic_app][basic_app]]                    | Basic deployment using cloud provider's load balancer             |
-| [[./overlays/app_nginx][app_nginx]]                    | Same as basic_app but uses nginx as the ingress                   |
-| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]           | Same as app_nginx but also uses self signed certificate           |
-| [[./overlays/app_secrets_nginx][app_secrets_nginx]]            | Same as app_self_ssl_nginx but using external-secrets             |
-| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]                | Same as app_self_ssl_nginx but uses cert-manager                  |
-| [[file:overlays/istio/][istio]]                        | Same as app_ssl_nginx but uses istio                              |
-| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]            | Same as istio but uses kubernetes ingress                         |
-| [[./overlays/monitoring][monitoring]]                   | Application with prometheus metrics for testing prometheus        |
-| [[./overlays/monitoring-istio/][monitoring-istio]]             | Same as monitoring but for istio                                  |
-| [[file:overlays/basic_app_internal/][basic_app_internal]]           | Same as basic_app but application isn't exposed                   |
-| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]]        | Same as basic_app_internal but also uses persistent volume        |
-| [[file:overlays/app_internal_istio/][app_internal_istio]]           | Same as basic_app_internal but uses cloud's internal LB           |
-| [[file:overlays/istio-websockets/][istio_websockets]]             | Same as istio but demonstrates websocket app with sidecar pattern |
-| [[file:overlays/app_internal_nginx/][app_internal_nginx]]           | Same as app_internal_istio but uses nginx ingress                 |
-| [[file:overlays/istio_canary/][istio_canary]]                 | Canary Deployment strategy using Istio                            |
-| [[file:overlays/nginx_canary/][nginx_canary]]                 | Canary Deployment strategy using NGINX                            |
-| [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]]   | Canary Deployment strategy using NGINX and Argo Rollouts          |
-| [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]] | Same as argo_rollouts_nginx_canary but with Analysis template     |
+| Overlay name                  | Description                                                       |
+|-------------------------------+-------------------------------------------------------------------|
+| [[./overlays/basic_app][basic_app]]                     | Basic deployment using cloud provider's load balancer             |
+| [[./overlays/app_nginx][app_nginx]]                     | Same as basic_app but uses nginx as the ingress                   |
+| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]            | Same as app_nginx but also uses self signed certificate           |
+| [[./overlays/app_secrets_nginx][app_secrets_nginx]]             | Same as app_self_ssl_nginx but using external-secrets             |
+| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]                 | Same as app_self_ssl_nginx but uses cert-manager                  |
+| [[file:overlays/istio/][istio]]                         | Same as app_ssl_nginx but uses istio                              |
+| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]             | Same as istio but uses kubernetes ingress                         |
+| [[./overlays/monitoring][monitoring]]                    | Application with prometheus metrics for testing prometheus        |
+| [[./overlays/monitoring-istio/][monitoring-istio]]              | Same as monitoring but for istio                                  |
+| [[file:overlays/basic_app_internal/][basic_app_internal]]            | Same as basic_app but application isn't exposed                   |
+| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]]         | Same as basic_app_internal but also uses persistent volume        |
+| [[file:overlays/app_internal_istio/][app_internal_istio]]            | Same as basic_app_internal but uses cloud's internal LB           |
+| [[file:overlays/istio-websockets/][istio_websockets]]              | Same as istio but demonstrates websocket app with sidecar pattern |
+| [[file:overlays/app_internal_nginx/][app_internal_nginx]]            | Same as app_internal_istio but uses nginx ingress                 |
+| [[file:overlays/istio_canary/][istio_canary]]                  | Canary Deployment strategy using Istio                            |
+| [[file:overlays/nginx_canary/][nginx_canary]]                  | Canary Deployment strategy using NGINX                            |
+| [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]]    | Canary Deployment strategy using NGINX and Argo Rollouts          |
+| [[file:overlays/argo_rollouts_nginx_canary_v2/][argo_rollouts_nginx_canary_v2]] | Same as [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]] but uses Deployment            |
+| [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]]  | Same as argo_rollouts_nginx_canary but with Analysis template     |
 
 * Usage
 
@@ -89,6 +90,9 @@ Available recipes:
     build-argo-rollouts-nginx-canary # Build argo-rollouts-nginx-canary overlay
     apply-argo-rollouts-nginx-canary # Apply argo-rollouts-nginx-canary overlay
     remove-argo-rollouts-nginx-canary-app # Remove argo-rollouts-nginx-canary overlay
+    build-argo-rollouts-nginx-canary_v2 # Build argo-rollouts-nginx-canary_v2 overlay
+    apply-argo-rollouts-nginx-canary_v2 # Apply argo-rollouts-nginx-canary_v2 overlay
+    remove-argo-rollouts-nginx-canary_v2 # Remove argo-rollouts-nginx-canary_v2 overlay
     build-argo-rollouts-nginx-analysis # Build argo-rollouts-nginx-analysis-analysis overlay
     apply-argo-rollouts-nginx-analysis # Apply argo-rollouts-nginx-analysis-analysis overlay
     remove-argo-rollouts-nginx-analysis # Remove argo-rollouts-nginx-analysis-analysis overlay
