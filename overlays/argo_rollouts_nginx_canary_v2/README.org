@@ -1,3 +1,10 @@
+* Table Of Contents                                                     :TOC:
+- [[#introduction][Introduction]]
+- [[#pre-requisites][Pre-requisites]]
+- [[#usage][Usage]]
+  - [[#canary-deployment][Canary Deployment]]
+- [[#reference][Reference]]
+
 * Introduction
 
 This overlay implements canary deployment using NGINX
