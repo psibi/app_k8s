@@ -29,6 +29,8 @@ spec:
           # Reference to an Ingress which has a rule pointing to the stable service (e.g. rollouts-demo-stable)
           # This ingress will be cloned with a new name, in order to achieve NGINX traffic splitting.
           stableIngress: prod-ingress
+          additionalIngressAnnotations:   # optional
+            canary-by-header: X-Canary
       steps:
       - setWeight: 20
       - pause: {}
