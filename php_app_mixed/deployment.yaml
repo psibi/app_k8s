@@ -18,10 +18,19 @@ spec:
       - name: nginx-config-volume
         configMap:
           name: nginx-config
+      - name: shared-files
+        emptyDir: {}
       containers:
       - image: psibi/php-demo-mixed:v1.0.0
         imagePullPolicy: IfNotPresent
         name: phpapp
+        volumeMounts:
+        - name: shared-files
+          mountPath: /var/media
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "cp -r /app/linux.png /var/media"]
       - image: nginx:1.7.9
         name: nginx
         ports:
@@ -30,3 +39,5 @@ spec:
         - name: nginx-config-volume
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
+        - name: shared-files
+          mountPath: /var/media
