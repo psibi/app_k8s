@@ -1,10 +1,14 @@
 * Introduction
 
-This directory has a sample PHP application that is deployed in a k8s
-cluster. These are the files that comprises the application:
+Modified version of [[file:~/github/app_k8s/php_app/][php_app]], but uses sidecar pattern to serve both
+static images as well as the PHP application. This is basically an
+implementation [[https://github.com/kubernetes/ingress-nginx/issues/4822#issuecomment-564645515][of this comment]].
+
+These are the files that comprises the application:
 
 - [[file:hello.php][hello.php]]
 - [[file:Dockerfile][Dockerfile]]
+- [[file:linux.png][linux.png]]
 
 * Pre-requisites
 
@@ -26,14 +30,14 @@ application:
 Make sure it builds fine. Then you can apply it like this:
 
 #+begin_src sh
-$ just apply-php-app
-kustomize build php_app > php_app.yaml
-kubectl apply -f php_app.yaml
+$ just apply-php-mixed-app
+kustomize build php_app_mixed > php_app_mixed.yaml
+kubectl apply -f php_app_mixed.yaml
 namespace/php-app unchanged
-configmap/phpapp-cm unchanged
+configmap/nginx-config configured
 service/phpapp unchanged
-deployment.apps/phpapp unchanged
-ingress.networking.k8s.io/phpapp configured
+deployment.apps/phpapp configured
+ingress.networking.k8s.io/phpapp unchanged
 #+end_src
 
 And then you can check it like this:
@@ -49,7 +53,7 @@ curl https://REDACTED | rg "<title>"
 * Destruction
 
 #+begin_src sh
-$ just remove-php-app
+$ just remove-php-mixed-app
 kubectl delete -f php_app.yaml
 namespace "php-app" deleted
 configmap "phpapp-cm" deleted
@@ -57,3 +61,7 @@ service "phpapp" deleted
 deployment.apps "phpapp" deleted
 ingress.networking.k8s.io "phpapp" deleted
 #+end_src
+
+* References
+
+- [[https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html][NGINX fastcgi reference]]
