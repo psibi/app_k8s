@@ -261,6 +261,19 @@ apply-argo-rollouts-nginx-analysis:
 remove-argo-rollouts-nginx-analysis:
     kubectl delete -f argo-rollouts-nginx-analysis_analysis.yaml
 
+# Build php app
+build-php-app:
+    kustomize build php_app
+
+# Apply php app
+apply-php-app:
+    kustomize build php_app > php_app.yaml
+    kubectl apply -f php_app.yaml
+
+# Remove php app
+remove-php-app:
+    kubectl delete -f php_app.yaml
+
 # Check kubectl
 check:
     kubectl get nodes
