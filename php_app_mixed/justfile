@@ -1,0 +1,19 @@
+# List all recipies
+default:
+    just --list --unsorted
+
+# Build image
+build-image:
+    docker build . -t psibi/php-demo-mixed:v1.0.0
+
+# Push image
+push-image:
+    docker push psibi/php-demo-mixed:v1.0.0
+
+# run image
+run-image:
+    docker run -it -p 9000:9000 psibi/php-demo-mixed:v1.0.0
+
+# Exec image
+exec-image:
+    docker run --rm -it --entrypoint sh psibi/php-demo-mixed:v1.0.0

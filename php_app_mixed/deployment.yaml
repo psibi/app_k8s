@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpapp
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: phpapp
+        version: v1
+    spec:
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
+      containers:
+      - image: psibi/php-demo-mixed:v1.0.0
+        imagePullPolicy: IfNotPresent
+        name: phpapp
+      - image: nginx:1.7.9
+        name: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
