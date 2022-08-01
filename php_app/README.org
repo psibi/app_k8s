@@ -1,0 +1,59 @@
+* Introduction
+
+This directory has a sample PHP application that is deployed in a k8s
+cluster. These are the files that comprises the application:
+
+- [[file:hello.php][hello.php]]
+- [[file:Dockerfile][Dockerfile]]
+
+* Pre-requisites
+
+For this base to work, following components are assumed to be
+installed in your k8s cluster:
+
+- [[https://kubernetes.github.io/ingress-nginx/][ingress-nginx]]
+- cert-manager
+
+Following are the things you need to edit before deploying this
+application:
+
+- [[file:ingress.yaml][ingress.yaml]]
+  - The host name
+  - cert manager cluster issuer annotation value
+
+* Usage
+
+Make sure it builds fine. Then you can apply it like this:
+
+#+begin_src sh
+$ just apply-php-app
+kustomize build php_app > php_app.yaml
+kubectl apply -f php_app.yaml
+namespace/php-app unchanged
+configmap/phpapp-cm unchanged
+service/phpapp unchanged
+deployment.apps/phpapp unchanged
+ingress.networking.k8s.io/phpapp configured
+#+end_src
+
+And then you can check it like this:
+
+#+begin_src sh :results verbatim
+curl https://REDACTED | rg "<title>"
+#+end_src
+
+#+RESULTS:
+:         <title>PHP Hello World!</title>
+: <title>phpinfo()</title><meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE" /></head>
+
+* Destruction
+
+#+begin_src sh
+$ just remove-php-app
+kubectl delete -f php_app.yaml
+namespace "php-app" deleted
+configmap "phpapp-cm" deleted
+service "phpapp" deleted
+deployment.apps "phpapp" deleted
+ingress.networking.k8s.io "phpapp" deleted
+#+end_src
