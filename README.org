@@ -26,6 +26,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[file:overlays/argo_rollouts_nginx_canary_v2/][argo_rollouts_nginx_canary_v2]] | Same as [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]] but uses Deployment            |
 | [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]]  | Same as argo_rollouts_nginx_canary but with Analysis template     |
 | [[file:php_app][php_app]]                       | PHP application demo with Ingress and cert-manager                |
+| [[file:php_app_mixed][php_app_mixed]]                 | Same as [[file:php_app/][php_app]] but also serves static content.                   |
 
 * Usage
 
@@ -100,6 +101,9 @@ Available recipes:
     build-php-app                # Build php app
     apply-php-app                # Apply php app
     remove-php-app               # Remove php app
+    build-php-mixed-app          # Build php mixed app
+    apply-php-mixed-app          # Apply php mixed app
+    remove-php-mixed-app         # Remove php mixed app
     check                        # Check kubectl
 #+end_example
 

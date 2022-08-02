@@ -274,6 +274,19 @@ apply-php-app:
 remove-php-app:
     kubectl delete -f php_app.yaml
 
+# Build php mixed app
+build-php-mixed-app:
+    kustomize build php_app_mixed
+
+# Apply php mixed app
+apply-php-mixed-app:
+    kustomize build php_app_mixed > php_app_mixed.yaml
+    kubectl apply -f php_app_mixed.yaml
+
+# Remove php mixed app
+remove-php-mixed-app:
+    kubectl delete -f php_app_mixed.yaml
+
 # Check kubectl
 check:
     kubectl get nodes

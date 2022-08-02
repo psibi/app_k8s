@@ -65,3 +65,4 @@ ingress.networking.k8s.io "phpapp" deleted
 * References
 
 - [[https://nginx.org/en/docs/http/ngx_http_fastcgi_module.html][NGINX fastcgi reference]]
+- [[https://www.nginx.com/resources/wiki/start/topics/examples/fastcgiexample/][NGINX FastCGI example]]
