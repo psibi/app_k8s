@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata:
   name: phpapp-cm
 data:
-  SCRIPT_FILENAME: "/app/hello.php"
+  DOCUMENT_ROOT: /app
+  REQUEST_METHOD: $request_method
+  SCRIPT_FILENAME: /app$fastcgi_script_name
