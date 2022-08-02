@@ -12,28 +12,21 @@ data:
         listen [::]:80 default_server;
 
         # Set nginx to serve files from the shared volume!
-        root /app;
+        root /var/app/webroot;
+        index index.php;
         server_name _;
-        location / {
-          fastcgi_pass 127.0.0.1:9000;
-          fastcgi_index hello.php;
 
-          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-          fastcgi_param QUERY_STRING    $query_string;
-          fastcgi_param REQUEST_METHOD  $request_method;
-          fastcgi_param CONTENT_TYPE    $content_type;
-          fastcgi_param CONTENT_LENGTH  $content_length;
+        location / {
+          try_files $uri $uri/ /index.php?$args;
         }
         location ~ \.php$ {
+          try_files $uri =404;
           include fastcgi_params;
-
-          fastcgi_param REQUEST_METHOD $request_method;
-          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
           fastcgi_pass 127.0.0.1:9000;
-        }
+          fastcgi_intercept_errors on;
 
-        location ~ \.(gif|jpg|png)$ {
-          root /var/media;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
         }
       }
     }
