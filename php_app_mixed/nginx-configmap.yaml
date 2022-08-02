@@ -12,7 +12,7 @@ data:
         listen [::]:80 default_server;
 
         # Set nginx to serve files from the shared volume!
-        root /var/app/webroot;
+        root /var/www-data/webroot;
         index index.php;
         server_name _;
 

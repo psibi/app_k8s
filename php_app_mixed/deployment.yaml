@@ -28,13 +28,13 @@ spec:
         name: phpapp
         volumeMounts:
         - name: shared-files
-          mountPath: /var/app
+          mountPath: /var/www-data
           readOnly: false
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "cp -r /app/* /var/app"]
-      - image: nginx:1.7.9
+              command: ["/bin/sh", "-c", "cp -r /app/* /var/www-data && chmod -R 666 /var/www-data/logs && chmod -R 666 /var/www-data/tmp && chown -R www-data:www-data /var/www-data"]
+      - image: nginx:1.23.1
         name: nginx
         ports:
         - containerPort: 80
@@ -43,5 +43,5 @@ spec:
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
         - name: shared-files
-          mountPath: /var/app
+          mountPath: /var/www-data
           readOnly: false
