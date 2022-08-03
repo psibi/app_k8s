@@ -12,7 +12,7 @@ data:
         listen [::]:80 default_server;
 
         # Set nginx to serve files from the shared volume!
-        root /var/www-data/webroot;
+        root /application/webroot;
         index index.php;
         server_name _;
 
@@ -23,6 +23,7 @@ data:
           try_files $uri =404;
           include fastcgi_params;
           fastcgi_pass 127.0.0.1:9000;
+          fastcgi_index index.php;
           fastcgi_intercept_errors on;
 
           fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

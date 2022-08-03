@@ -21,19 +21,19 @@ spec:
       - name: shared-files
         emptyDir: {}
       containers:
-      - image: psibi/cake-php-demo:v1.0.2
+      - image: psibi/cake-php-demo:v1.0.7
         securityContext:
-          runAsUser: 0
+          runAsUser: 1000
         imagePullPolicy: IfNotPresent
         name: phpapp
         volumeMounts:
         - name: shared-files
-          mountPath: /var/www-data
+          mountPath: /application
           readOnly: false
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "cp -r /app/* /var/www-data && chmod -R 666 /var/www-data/logs && chmod -R 666 /var/www-data/tmp && chown -R www-data:www-data /var/www-data"]
+              command: ["/bin/sh", "-c", "cp -r /app/* /application"]
       - image: nginx:1.23.1
         name: nginx
         ports:
@@ -43,5 +43,5 @@ spec:
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
         - name: shared-files
-          mountPath: /var/www-data
+          mountPath: /application
           readOnly: false
