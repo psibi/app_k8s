@@ -1,0 +1,11 @@
+* Introduction
+
+This directory houses configuration files required for docker-compose.
+
+* Notes
+
+Some things which you should note for making the docker compose setup
+work:
+
+- The path location for both nginx and php-fpm docker images should be
+  same. (an easy mistake to make)
