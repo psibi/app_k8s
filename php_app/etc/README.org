@@ -9,3 +9,12 @@ work:
 
 - The path location for both nginx and php-fpm docker images should be
   same. (an easy mistake to make)
+- The nginx refers to the fpm service using the service name. This is
+  how it's defined in the nginx configuration:
+
+#+begin_example conf
+fastcgi_pass web:9000;
+#+end_example
+
+As you can see we don't specificy ~localhost:9000~ and instead refer
+by the service name here.
