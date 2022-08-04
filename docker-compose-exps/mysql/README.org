@@ -1,0 +1,64 @@
+* Introduction
+
+This example docker-compose file demonstrate the ability to spawn two
+images ubuntu and mysql and then doing an exec into ubuntu image to
+access mysql.
+
+* Usage
+
+You can verify that you are able to do exec directly into the mysql
+image:
+
+#+begin_example sh
+❯ docker-compose exec mysql sh
+sh-4.4# ls
+bin  boot  dev  docker-entrypoint-initdb.d  entrypoint.sh  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+sh-4.4# mysql -u cakephp -pcakephp cakephp
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+#+end_example
+
+Exec into ubuntu's shell:
+
+#+begin_example sh
+❯ docker-compose exec ubuntu bash
+root@d95b6f59f500:/# netstat -ln
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 127.0.0.11:33201        0.0.0.0:*               LISTEN
+udp        0      0 127.0.0.11:59870        0.0.0.0:*
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node   Path
+root@d95b6f59f500:/# mysql -h mysql -u cakephp -pcakephp cakephp
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+#+end_example
+
+Infact, you can verify via netstat about the host:
+
+#+begin_example sh
+root@d95b6f59f500:/# netstat
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 d95b6f59f500:46462      mysql-app.mysql_de:3306 TIME_WAIT
+Active UNIX domain sockets (w/o servers)
+Proto RefCnt Flags       Type       State         I-Node   Path
+#+end_example
