@@ -116,6 +116,9 @@ kubectl argo rollouts -n canary set image rollouts-demo prod=docker.io/argoproj/
 #+RESULTS:
 : rollouts-demo
 
+Note that the *prod* in the above command refers to the [[file:rollout.yaml][container
+image name]] in the rollout.
+
 Now let's check the status again:
 
 #+begin_src sh :results verbatim  :exports both
