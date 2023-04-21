@@ -27,6 +27,7 @@ Sample application to deploy in Kubernetes and test things out!
 | [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]]  | Same as argo_rollouts_nginx_canary but with Analysis template     |
 | [[file:php_app][php_app]]                       | PHP application demo with Ingress and cert-manager                |
 | [[file:php_app_mixed][php_app_mixed]]                 | Same as [[file:php_app/][php_app]] but also serves static content.                   |
+| [[file:overlays/nginx_blue_green/][nginx_blue_green]]              | Blue green deployment using NGINX                                 |
 
 * Usage
 

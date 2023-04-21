@@ -287,6 +287,19 @@ apply-php-mixed-app:
 remove-php-mixed-app:
     kubectl delete -f php_app_mixed.yaml
 
+# Build NGINX blue green app
+build-nginx-bg-app:
+    kustomize build overlays/nginx_blue_green
+
+# Apply NGINX blue green app
+apply-nginx-bg-app:
+    kustomize build overlays/nginx_blue_green > nginx_bg.yaml
+    kubectl apply -f nginx_bg.yaml
+
+# Remove NGINX blue green app
+remove-nginx-bg-app:
+    kubectl delete -f nginx_bg.yaml
+
 # Check kubectl
 check:
     kubectl get nodes
