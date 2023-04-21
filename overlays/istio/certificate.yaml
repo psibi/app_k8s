@@ -12,7 +12,7 @@ metadata:
 spec:
   secretName: httpbin-ingress-cert
   issuerRef:
-    name: letsencrypt-prod # kubectl get clusterissuer -A
+    name: letsencrypt-dns-prod
     kind: ClusterIssuer
   dnsNames:
   - REDACTED

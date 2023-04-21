@@ -13,9 +13,9 @@ installed in your k8s cluster:
 You might want to change the hostname and/or the selector in the gateway
 and virtualservice according to your setup:
 
-- gateway.yaml
-- certificate.yaml
-- virtualservice.yaml
+- [[file:gateway.yaml][gateway.yaml]]
+- [[file:certificate.yaml][certificate.yaml]]
+- [[file:virtualservice.yaml][virtualservice.yaml]]
 
 * Usage
 
