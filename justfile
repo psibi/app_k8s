@@ -300,6 +300,19 @@ apply-nginx-bg-app:
 remove-nginx-bg-app:
     kubectl delete -f nginx_bg.yaml
 
+# Build NGINX blue green app using rollouts
+build-nginx-rbg-app:
+    kustomize build overlays/nginx_rollout_blue_green
+
+# Apply NGINX blue green app using rollouts
+apply-nginx-rbg-app:
+    kustomize build overlays/nginx_rollout_blue_green > nginx_rbg.yaml
+    kubectl apply -f nginx_rbg.yaml
+
+# Remove NGINX blue green app using rollouts
+remove-nginx-rbg-app:
+    kubectl delete -f nginx_rbg.yaml
+
 # Check kubectl
 check:
     kubectl get nodes

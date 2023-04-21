@@ -162,4 +162,12 @@ NAME                              KIND        STATUS        AGE    INFO
 
 #+begin_example sh
 $ just remove-nginx-rbg-app
+kubectl delete -f nginx_rbg.yaml
+namespace "app" deleted
+service "blue" deleted
+service "green" deleted
+deployment.apps "blue" deleted
+rollout.argoproj.io "blue" deleted
+ingress.networking.k8s.io "blue" deleted
+ingress.networking.k8s.io "green" deleted
 #+end_example
