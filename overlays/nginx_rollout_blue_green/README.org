@@ -1,0 +1,165 @@
+* Introduction
+
+This overlay implements blue green deployment using NGINX
+controller and argo rollouts. There are two applications here:
+
+- blue application ([[https://hub.docker.com/layers/argoproj/rollouts-demo/blue/images/sha256-3225193a6415b14b3fcdd160c40248b2bfd62f8c77326480559b91a41ced6e20?context=explore][blue application]])
+- green application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to switch the traffic from the blue environment to
+the green environment once testing is complete on the green
+environment.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- NGINX controller
+- cert-manager
+- external-dns
+
+You might want to change the hostname in the following ingresses:
+
+- [[file:green_ingress.yaml][Green ingress]]
+- [[file:ingress.yaml][Blue ingress]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just build-nginx-rbg-app
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+❯ just apply-nginx-rbg-app
+kustomize build overlays/nginx_rollout_blue_green > nginx_rbg.yaml
+kubectl apply -f nginx_rbg.yaml
+namespace/app created
+service/blue created
+service/green created
+deployment.apps/blue created
+rollout.argoproj.io/blue created
+ingress.networking.k8s.io/blue created
+ingress.networking.k8s.io/green created
+#+end_src
+
+* Test the applications
+
+There is only one application right now and you can test it like this:
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
+"blue"
+#+end_example
+
+* Deploy the green application
+
+Now we need to edit the [[file:deployment.yaml][deployment.yaml]] file and change the image:
+
+       #+begin_src diff
+       containers:
+-      - image: docker.io/argoproj/rollouts-demo:blue
++      - image: docker.io/argoproj/rollouts-demo:green
+       #+end_src
+
+And then apply the manifests again. You can check the status now:
+
+#+begin_src sh
+❯ kubectl argo rollouts -n app get rollout blue
+Name:            blue
+Namespace:       app
+Status:          ॥ Paused
+Message:         BlueGreenPause
+Strategy:        BlueGreen
+Images:          docker.io/argoproj/rollouts-demo:blue (stable, active)
+                 docker.io/argoproj/rollouts-demo:green (preview)
+Replicas:
+  Desired:       2
+  Current:       4
+  Updated:       2
+  Ready:         2
+  Available:     2
+
+NAME                              KIND        STATUS     AGE  INFO
+⟳ blue                            Rollout     ॥ Paused   11m
+├──# revision:2
+│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy  35s  preview
+│     ├──□ blue-7656cd9676-m2pdf  Pod         ✔ Running  35s  ready:1/1
+│     └──□ blue-7656cd9676-pwpzh  Pod         ✔ Running  35s  ready:1/1
+└──# revision:1
+   └──⧉ blue-679b5d66b7           ReplicaSet  ✔ Healthy  11m  stable,active
+      ├──□ blue-679b5d66b7-xj9gc  Pod         ✔ Running  11m  ready:1/1
+      └──□ blue-679b5d66b7-z26g8  Pod         ✔ Running  11m  ready:1/1
+#+end_src
+
+#+begin_src sh
+❯ curl -k https://BLUE_REDACTED/color
+"blue"
+#+end_src
+
+You can also check the green application:
+
+#+begin_src sh
+❯ curl -k https://GREEN_REDACTED/color
+"green"
+#+end_src
+
+Now if you are happy with the green application, you can promote it
+via the CLI:
+
+#+begin_src sh
+❯ kubectl argo rollouts -n app promote blue
+rollout 'blue' promoted
+#+end_src
+
+And you can verify the blue application again:
+
+#+begin_src sh
+❯ curl -k https://BLUE_REDACTED/color
+"green"
+#+end_src
+
+Note that the green application will be giving green since there will
+be only one application present now:
+
+#+begin_src sh
+❯ curl -k https://GREEN_REDACTED/color
+"green"
+#+end_src
+
+You can confirm the rollout:
+
+#+begin_src sh
+❯ kubectl argo rollouts -n app get rollout blue
+Name:            blue
+Namespace:       app
+Status:          ✔ Healthy
+Strategy:        BlueGreen
+Images:          docker.io/argoproj/rollouts-demo:green (stable, active)
+Replicas:
+  Desired:       2
+  Current:       2
+  Updated:       2
+  Ready:         2
+  Available:     2
+
+NAME                              KIND        STATUS        AGE    INFO
+⟳ blue                            Rollout     ✔ Healthy     127m
+├──# revision:2
+│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy     2m39s  stable,active
+│     ├──□ blue-7656cd9676-m5hjs  Pod         ✔ Running     2m39s  ready:1/1
+│     └──□ blue-7656cd9676-pbptv  Pod         ✔ Running     2m39s  ready:1/1
+└──# revision:1
+   └──⧉ blue-679b5d66b7           ReplicaSet  • ScaledDown  127m
+#+end_src
+
+
+* Destruction
+
+#+begin_example sh
+$ just remove-nginx-rbg-app
+#+end_example

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: green
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-dns-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: GREEN_REDACTED
+    http:
+      paths:
+      - backend:
+          service:
+            name: green
+            port:
+              number: 8000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - GREEN_REDACTED
+    secretName: green-tls
