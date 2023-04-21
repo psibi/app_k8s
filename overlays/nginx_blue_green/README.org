@@ -1,0 +1,96 @@
+* Introduction
+
+This overlay implements blue green deployment using NGINX
+controller. There are two applications here:
+
+- blue application ([[https://hub.docker.com/layers/argoproj/rollouts-demo/blue/images/sha256-3225193a6415b14b3fcdd160c40248b2bfd62f8c77326480559b91a41ced6e20?context=explore][blue application]])
+- green application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to switch the traffic from the blue environment to
+the green environment once testing is complete on the green
+environment.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- NGINX controller
+- cert-manager
+- external-dns
+
+You might want to change the hostname in the following ingresses:
+
+- [[file:green_ingress.yaml][Green ingress]]
+- [[file:ingress.yaml][Blue ingress]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just build-nginx-bg-app
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+❯ just apply-nginx-bg-app
+kustomize build overlays/nginx_blue_green > nginx_bg.yaml
+kubectl apply -f nginx_bg.yaml
+namespace/app created
+service/blue created
+deployment.apps/blue created
+ingress.networking.k8s.io/blue created
+#+end_src
+
+* Test the applications
+
+There are two applications to test:
+
+- Let's check the blue application
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
+"blue"
+#+end_example
+
+- And the green application:
+
+#+begin_example sh
+❯ curl -s https://GREEN_REDACTED/color
+"green"
+#+end_example
+
+* Switch traffic from blue to green
+
+To switch the blue app to use the green app, modify the blue [[file:service.yaml][service]]
+and switch the selector
+
+  #+begin_src diff
+  selector:
+-    app: blue
++    app: green
+  #+end_src
+
+And then re-apply you manifests again. You can again test the blue
+application and you can see a different response:
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
+"green"
+#+end_example
+
+* Destruction
+
+#+begin_example sh
+$ just remove-nginx-bg-app
+kubectl delete -f nginx_bg.yaml
+namespace "app" deleted
+service "blue" deleted
+service "green" deleted
+deployment.apps "blue" deleted
+deployment.apps "green" deleted
+ingress.networking.k8s.io "blue" deleted
+ingress.networking.k8s.io "green" deleted
+#+end_example
