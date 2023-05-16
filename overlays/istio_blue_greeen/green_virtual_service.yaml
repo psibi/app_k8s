@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: green
+spec:
+  hosts:
+  - GREEN_REDACTED
+  gateways:
+  - bg-gateway
+  http:
+  - route:
+    - destination:
+        port:
+          number: 8000
+        host: green.app.svc.cluster.local

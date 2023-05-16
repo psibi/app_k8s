@@ -1,0 +1,117 @@
+* Introduction
+
+This overlay implements blue green deployment using istio. There are
+two applications here:
+
+- blue application ([[https://hub.docker.com/layers/argoproj/rollouts-demo/blue/images/sha256-3225193a6415b14b3fcdd160c40248b2bfd62f8c77326480559b91a41ced6e20?context=explore][blue application]])
+- green application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
+
+The objective is to switch the traffic from the blue environment to
+the green environment once testing is complete on the green
+environment.
+
+* Pre-requisites
+
+For this overlay to work, following components are assumed to be
+installed in your k8s cluster:
+
+- Istio
+- cert-manager
+- external-dns
+
+You might want to change the hostname in the following ingresses:
+
+- [[file:certificate.yaml][certificate.yaml]]
+- [[file:bg_gateway.yaml][bg_gateway.yaml]]
+- [[file:blue_virtual_service.yaml][blue_virtual_service.yaml]]
+- [[file:green_virtual_service.yaml][green_virtual_service.yaml]]
+
+* Usage
+
+Make sure it builds fine:
+
+#+begin_src sh
+$ just build-istio-bg-app
+#+end_src
+
+Now go ahead and deploy it:
+
+#+begin_src
+❯ just apply-istio-bg-app
+kustomize build overlays/istio_blue_greeen/ > istio_rbg.yaml
+kubectl apply -f istio_rbg.yaml
+namespace/app created
+service/blue created
+service/green created
+deployment.apps/blue created
+deployment.apps/green created
+gateway.networking.istio.io/bg-gateway created
+virtualservice.networking.istio.io/blue created
+virtualservice.networking.istio.io/green created
+kubectl apply -f overlays/istio_blue_greeen/certificate.yaml
+certificate.cert-manager.io/istio-blue-green-cert unchanged
+#+end_src
+
+* Test the applications
+
+There are two applications to test:
+
+- Let's check the blue application
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
+"blue"
+#+end_example
+
+- And the green application:
+
+#+begin_example sh
+❯ curl -s https://GREEN_REDACTED/color
+"green"
+#+end_example
+
+* Switch traffic from blue to green
+
+To switch the blue app to use the green app, modify the [[file:blue_virtual_service.yaml][blue virtual
+service]]:
+
+  #+begin_src diff
+  selector:
+-       host: blue.app.svc.cluster.local
++       host: green.app.svc.cluster.local
+  #+end_src
+
+Now you can test the behavior:
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
+"green"
+#+end_example
+
+Also, modify the [[file:green_virtual_service.yaml][green_virtual_service.yaml]] to switch services:
+
+  #+begin_src diff
+  selector:
+-       host: green.app.svc.cluster.local
++       host: blue.app.svc.cluster.local
+  #+end_src
+
+Note that you don't need to do the last change, but it will be
+ultimately required for future updates. This method has the
+disadvantage that for future updates, you would have to change the
+image of blue deployment (as changing the green deployment will change
+the current blue app url).
+
+* Destruction
+
+#+begin_example sh
+❯ just remove-istio-bg-app
+kubectl delete -f nginx_bg.yaml
+namespace "app" deleted
+service "blue" deleted
+service "green" deleted
+deployment.apps "blue" deleted
+deployment.apps "green" deleted
+ingress.networking.k8s.io "blue" deleted
+ingress.networking.k8s.io "green" deleted
+#+end_example
