@@ -4,33 +4,33 @@ Sample application to deploy in Kubernetes and test things out!
 
 * Overlays
 
-| Overlay name                   | Description                                                       |   |
-|--------------------------------+-------------------------------------------------------------------+---|
-| [[./overlays/basic_app][basic_app]]                      | Basic deployment using cloud provider's load balancer             |   |
-| [[./overlays/app_nginx][app_nginx]]                      | Same as basic_app but uses nginx as the ingress                   |   |
-| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]             | Same as app_nginx but also uses self signed certificate           |   |
-| [[./overlays/app_secrets_nginx][app_secrets_nginx]]              | Same as app_self_ssl_nginx but using external-secrets             |   |
-| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]                  | Same as app_self_ssl_nginx but uses cert-manager                  |   |
-| [[file:overlays/istio/][istio]]                          | Same as app_ssl_nginx but uses istio                              |   |
-| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]              | Same as istio but uses kubernetes ingress                         |   |
-| [[./overlays/monitoring][monitoring]]                     | Application with prometheus metrics for testing prometheus        |   |
-| [[./overlays/monitoring-istio/][monitoring-istio]]               | Same as monitoring but for istio                                  |   |
-| [[file:overlays/basic_app_internal/][basic_app_internal]]             | Same as basic_app but application isn't exposed                   |   |
-| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]]          | Same as basic_app_internal but also uses persistent volume        |   |
-| [[file:overlays/app_internal_istio/][app_internal_istio]]             | Same as basic_app_internal but uses cloud's internal LB           |   |
-| [[file:overlays/istio-websockets/][istio_websockets]]               | Same as istio but demonstrates websocket app with sidecar pattern |   |
-| [[file:overlays/app_internal_nginx/][app_internal_nginx]]             | Same as app_internal_istio but uses nginx ingress                 |   |
-| [[file:overlays/istio_canary/][istio_canary]]                   | Canary Deployment strategy using Istio                            |   |
-| [[file:overlays/nginx_canary/][nginx_canary]]                   | Canary Deployment strategy using NGINX                            |   |
-| [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]]     | Canary Deployment strategy using NGINX and Argo Rollouts          |   |
-| [[file:overlays/argo_rollouts_nginx_canary_v2/][argo_rollouts_nginx_canary_v2]]  | Same as [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]] but uses Deployment            |   |
-| [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]]   | Same as argo_rollouts_nginx_canary but with Analysis template     |   |
-| [[file:php_app][php_app]]                        | PHP application demo with Ingress and cert-manager                |   |
-| [[file:php_app_mixed][php_app_mixed]]                  | Same as [[file:php_app/][php_app]] but also serves static content.                   |   |
-| [[file:overlays/nginx_blue_green/][nginx_blue_green]]               | Blue green deployment using NGINX                                 |   |
-| [[file:overlays/nginx_rollout_blue_green/][nginx_rollout_blue_green]]       | Blue green deployment using NGINX and Argo Rollouts               |   |
-| [[file:overlays/istio_blue_greeen/][istio_blue_green]]               | Blue green deployment using Istio                                 |   |
-| [[file:overlays/istio_argo_rollouts_blue_green/][istio_argo_rollouts_blue_green]] | Blue green deployment using Istio and Argo Rollouts               |   |
+| Overlay name                   | Description                                                       |
+|--------------------------------+-------------------------------------------------------------------|
+| [[./overlays/basic_app][basic_app]]                      | Basic deployment using cloud provider's load balancer             |
+| [[./overlays/app_nginx][app_nginx]]                      | Same as basic_app but uses nginx as the ingress                   |
+| [[./overlays/app_self_ssl_nginx][app_self_ssl_nginx]]             | Same as app_nginx but also uses self signed certificate           |
+| [[./overlays/app_secrets_nginx][app_secrets_nginx]]              | Same as app_self_ssl_nginx but using external-secrets             |
+| [[./overlays/app_ssl_nginx/][app_ssl_nginx]]                  | Same as app_self_ssl_nginx but uses cert-manager                  |
+| [[file:overlays/istio/][istio]]                          | Same as app_ssl_nginx but uses istio                              |
+| [[file:overlays/istio_k8s_ingress/][istio_k8s_ingress]]              | Same as istio but uses kubernetes ingress                         |
+| [[./overlays/monitoring][monitoring]]                     | Application with prometheus metrics for testing prometheus        |
+| [[./overlays/monitoring-istio/][monitoring-istio]]               | Same as monitoring but for istio                                  |
+| [[file:overlays/basic_app_internal/][basic_app_internal]]             | Same as basic_app but application isn't exposed                   |
+| [[file:overlays/basic_app_internal_pv/][basic_app_internal_pv]]          | Same as basic_app_internal but also uses persistent volume        |
+| [[file:overlays/app_internal_istio/][app_internal_istio]]             | Same as basic_app_internal but uses cloud's internal LB           |
+| [[file:overlays/istio-websockets/][istio_websockets]]               | Same as istio but demonstrates websocket app with sidecar pattern |
+| [[file:overlays/app_internal_nginx/][app_internal_nginx]]             | Same as app_internal_istio but uses nginx ingress                 |
+| [[file:overlays/istio_canary/][istio_canary]]                   | Canary Deployment strategy using Istio                            |
+| [[file:overlays/nginx_canary/][nginx_canary]]                   | Canary Deployment strategy using NGINX                            |
+| [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]]     | Canary Deployment strategy using NGINX and Argo Rollouts          |
+| [[file:overlays/argo_rollouts_nginx_canary_v2/][argo_rollouts_nginx_canary_v2]]  | Same as [[file:overlays/argo_rollouts_nginx_canary/][argo_rollouts_nginx_canary]] but uses Deployment            |
+| [[file:overlays/argo_rollouts_nginx_analysis/][argo_rollouts_nginx_analysis]]   | Same as argo_rollouts_nginx_canary but with Analysis template     |
+| [[file:php_app][php_app]]                        | PHP application demo with Ingress and cert-manager                |
+| [[file:php_app_mixed][php_app_mixed]]                  | Same as [[file:php_app/][php_app]] but also serves static content.                   |
+| [[file:overlays/nginx_blue_green/][nginx_blue_green]]               | Blue green deployment using NGINX                                 |
+| [[file:overlays/nginx_rollout_blue_green/][nginx_rollout_blue_green]]       | Blue green deployment using NGINX and Argo Rollouts               |
+| [[file:overlays/istio_blue_greeen/][istio_blue_green]]               | Blue green deployment using Istio                                 |
+| [[file:overlays/istio_argo_rollouts_blue_green/][istio_argo_rollouts_blue_green]] | Blue green deployment using Istio and Argo Rollouts               |
 
 * Usage
 
