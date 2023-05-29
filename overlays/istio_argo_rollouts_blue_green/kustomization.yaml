@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: app
+
+resources:
+- namespace.yaml
+- blue_deployment.yaml
+- blue_service.yaml
+- blue_virtual_service.yaml
+- green_service.yaml
+- green_virtual_service.yaml
+- bg_gateway.yaml
+- rollout.yaml

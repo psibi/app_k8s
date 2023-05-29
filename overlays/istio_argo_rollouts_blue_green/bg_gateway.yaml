@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bg-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - BLUE_REDACTED
+    - GREEN_REDACTED
+    port:
+      name: https-app
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: blue-green-istio-tls
+      mode: SIMPLE
+  - hosts:
+    - BLUE_REDACTED
+    - GREEN_REDACTED
+    port:
+      name: http-app
+      number: 80
+      protocol: HTTP

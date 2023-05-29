@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: istio-blue-green-cert
+  namespace: istio-system
+spec:
+  secretName: blue-green-istio-tls
+  issuerRef:
+    name: letsencrypt-dns-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - BLUE_REDACTED
+  - GREEN_REDACTED

@@ -313,20 +313,35 @@ apply-nginx-rbg-app:
 remove-nginx-rbg-app:
 	kubectl delete -f nginx_rbg.yaml
 
-# Build Istio blue green app using rollouts
+# Build Istio blue green app
 build-istio-bg-app:
 	kustomize build overlays/istio_blue_greeen/
 
-# istio_blue_greeen ISTIO blue green app using rollouts
+# istio_blue_greeen ISTIO blue green app
 apply-istio-bg-app:
 	kustomize build overlays/istio_blue_greeen/ > istio_rbg.yaml
 	kubectl apply -f istio_rbg.yaml
 	kubectl apply -f overlays/istio_blue_greeen/certificate.yaml
 
-# Remove ISTIO blue green app using rollouts
+# Remove ISTIO blue green app
 remove-istio-bg-app:
 	kubectl delete -f istio_rbg.yaml
 	kubectl delete -f overlays/istio_blue_greeen/certificate.yaml
+
+# Build Istio blue green app using rollouts
+build-istio-rbg-app:
+	kustomize build overlays/istio_argo_rollouts_blue_green/
+
+# istio_blue_greeen ISTIO blue green app using rollouts
+apply-istio-rbg-app:
+	kustomize build overlays/istio_argo_rollouts_blue_green/ > istio_robg.yaml
+	kubectl apply -f istio_robg.yaml
+	kubectl apply -f overlays/istio_argo_rollouts_blue_green/certificate.yaml
+
+# Remove ISTIO blue green app using rollouts
+remove-istio-rbg-app:
+	kubectl delete -f istio_robg.yaml
+	kubectl delete -f overlays/istio_argo_rollouts_blue_green/certificate.yaml
 
 # Check kubectl
 check:

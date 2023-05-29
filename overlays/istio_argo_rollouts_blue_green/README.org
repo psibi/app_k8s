@@ -1,7 +1,7 @@
 * Introduction
 
-This overlay implements blue green deployment using NGINX
-controller and argo rollouts. There are two applications here:
+This overlay implements blue green deployment using istio. There are
+two applications here:
 
 - blue application ([[https://hub.docker.com/layers/argoproj/rollouts-demo/blue/images/sha256-3225193a6415b14b3fcdd160c40248b2bfd62f8c77326480559b91a41ced6e20?context=explore][blue application]])
 - green application ([[https://hub.docker.com/r/argoproj/rollouts-demo/tags?page=1&name=green][green applicaion]])
@@ -15,46 +15,61 @@ environment.
 For this overlay to work, following components are assumed to be
 installed in your k8s cluster:
 
-- NGINX controller
+- Istio
 - cert-manager
 - external-dns
 
 You might want to change the hostname in the following ingresses:
 
-- [[file:green_ingress.yaml][Green ingress]]
-- [[file:ingress.yaml][Blue ingress]]
+- [[file:certificate.yaml][certificate.yaml]]
+- [[file:bg_gateway.yaml][bg_gateway.yaml]]
+- [[file:blue_virtual_service.yaml][blue_virtual_service.yaml]]
+- [[file:green_virtual_service.yaml][green_virtual_service.yaml]]
 
 * Usage
 
 Make sure it builds fine:
 
 #+begin_src sh
-$ just build-nginx-rbg-app
+$ just build-istio-rbg-app
 #+end_src
 
 Now go ahead and deploy it:
 
 #+begin_src
-❯ just apply-nginx-rbg-app
-kustomize build overlays/nginx_rollout_blue_green > nginx_rbg.yaml
-kubectl apply -f nginx_rbg.yaml
-namespace/app created
-service/blue created
-service/green created
-deployment.apps/blue created
-rollout.argoproj.io/blue created
-ingress.networking.k8s.io/blue created
-ingress.networking.k8s.io/green created
+kustomize build overlays/istio_argo_rollouts_blue_green/ > istio_robg.yaml
+kubectl apply -f istio_robg.yaml
+namespace/app unchanged
+service/blue unchanged
+service/green unchanged
+deployment.apps/blue unchanged
+rollout.argoproj.io/blue unchanged
+gateway.networking.istio.io/bg-gateway unchanged
+virtualservice.networking.istio.io/blue unchanged
+virtualservice.networking.istio.io/green unchanged
+kubectl apply -f overlays/istio_argo_rollouts_blue_green/certificate.yaml
+certificate.cert-manager.io/istio-blue-green-cert unchanged
 #+end_src
 
 * Test the applications
 
-There is only one application right now and you can test it like this:
+There are two URLs to test:
+
+- Let's check the blue ingress
 
 #+begin_example sh
 ❯ curl -s https://BLUE_REDACTED/color
 "blue"
 #+end_example
+
+- And the green ingress:
+
+#+begin_example sh
+❯ curl -s https://GREEN_REDACTED/color
+"blue"
+#+end_example
+
+Both of them will give blue response which is expected.
 
 * Deploy the green application
 
@@ -85,28 +100,29 @@ Replicas:
   Available:     2
 
 NAME                              KIND        STATUS     AGE  INFO
-⟳ blue                            Rollout     ॥ Paused   11m
+⟳ blue                            Rollout     ॥ Paused   51m
 ├──# revision:2
-│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy  35s  preview
-│     ├──□ blue-7656cd9676-m2pdf  Pod         ✔ Running  35s  ready:1/1
-│     └──□ blue-7656cd9676-pwpzh  Pod         ✔ Running  35s  ready:1/1
+│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy  94s  preview
+│     ├──□ blue-7656cd9676-4mzrv  Pod         ✔ Running  94s  ready:2/2
+│     └──□ blue-7656cd9676-jddmg  Pod         ✔ Running  94s  ready:2/2
 └──# revision:1
-   └──⧉ blue-679b5d66b7           ReplicaSet  ✔ Healthy  11m  stable,active
-      ├──□ blue-679b5d66b7-xj9gc  Pod         ✔ Running  11m  ready:1/1
-      └──□ blue-679b5d66b7-z26g8  Pod         ✔ Running  11m  ready:1/1
+   └──⧉ blue-679b5d66b7           ReplicaSet  ✔ Healthy  51m  stable,active
+      ├──□ blue-679b5d66b7-68rc8  Pod         ✔ Running  51m  ready:2/2
+      └──□ blue-679b5d66b7-fnglk  Pod         ✔ Running  51m  ready:2/2
 #+end_src
 
-#+begin_src sh
-❯ curl -k https://BLUE_REDACTED/color
+
+#+begin_example sh
+❯ curl -s https://BLUE_REDACTED/color
 "blue"
-#+end_src
+#+end_example
 
-You can also check the green application:
+And the green ingress:
 
-#+begin_src sh
-❯ curl -k https://GREEN_REDACTED/color
+#+begin_example sh
+❯ curl -s https://GREEN_REDACTED/color
 "green"
-#+end_src
+#+end_example
 
 Now if you are happy with the green application, you can promote it
 via the CLI:
@@ -148,26 +164,26 @@ Replicas:
   Available:     2
 
 NAME                              KIND        STATUS        AGE    INFO
-⟳ blue                            Rollout     ✔ Healthy     127m
+⟳ blue                            Rollout     ✔ Healthy     54m
 ├──# revision:2
-│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy     2m39s  stable,active
-│     ├──□ blue-7656cd9676-m5hjs  Pod         ✔ Running     2m39s  ready:1/1
-│     └──□ blue-7656cd9676-pbptv  Pod         ✔ Running     2m39s  ready:1/1
+│  └──⧉ blue-7656cd9676           ReplicaSet  ✔ Healthy     3m54s  stable,active
+│     ├──□ blue-7656cd9676-4mzrv  Pod         ✔ Running     3m54s  ready:2/2
+│     └──□ blue-7656cd9676-jddmg  Pod         ✔ Running     3m54s  ready:2/2
 └──# revision:1
-   └──⧉ blue-679b5d66b7           ReplicaSet  • ScaledDown  127m
+   └──⧉ blue-679b5d66b7           ReplicaSet  • ScaledDown  54m
 #+end_src
 
 
 * Destruction
 
 #+begin_example sh
-$ just remove-nginx-rbg-app
-kubectl delete -f nginx_rbg.yaml
+❯ just remove-istio-bg-app
+kubectl delete -f nginx_bg.yaml
 namespace "app" deleted
 service "blue" deleted
 service "green" deleted
 deployment.apps "blue" deleted
-rollout.argoproj.io "blue" deleted
+deployment.apps "green" deleted
 ingress.networking.k8s.io "blue" deleted
 ingress.networking.k8s.io "green" deleted
 #+end_example
